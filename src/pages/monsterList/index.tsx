@@ -1,8 +1,10 @@
+import PageWrapper from "../../shared/ui/pageWrapper";
+
 function MonsterList () {
     return (
-        <div>
-            Monster list!
-        </div>
+        <PageWrapper header='Monster List'>
+            Monster List!
+        </PageWrapper>
     )
 }
 

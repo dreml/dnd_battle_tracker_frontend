@@ -16,7 +16,6 @@ import {ROUTE_CAMPAIGN_LIST, ROUTE_MONSTER_LIST} from "../shared/router";
 const queryClient = new QueryClient();
 
 function App() {
-
     return (
         <BrowserRouter>
             <StyleProvider layer>
@@ -28,7 +27,6 @@ function App() {
                     </Routes>
                 </QueryClientProvider>
             </StyleProvider>
-
         </BrowserRouter>
     )
 }

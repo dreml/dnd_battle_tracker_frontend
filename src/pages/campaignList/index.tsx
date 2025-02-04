@@ -1,8 +1,10 @@
+import PageWrapper from "../../shared/ui/pageWrapper";
+
 function CampaignList() {
     return (
-        <div>
-            campaignList
-        </div>
+        <PageWrapper header='Campaigns'>
+            Campaign List!
+        </PageWrapper>
     )
 }
 
