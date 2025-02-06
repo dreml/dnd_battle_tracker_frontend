@@ -10,29 +10,32 @@ const { Content, Sider, Header } = Layout;
 type PageWrapperT = {
     header?: string;
     children?: ReactNode;
+    hasMenu?: boolean;
 }
 
-function PageWrapper(props: PageWrapperT) {
+function PageWrapper({ header, children, hasMenu = true } : PageWrapperT) {
     const [collapsed, setCollapsed] = useState(false);
 
     return(
         <Layout hasSider>
-            <Sider style={ style.sider }
-                   collapsible
-                   collapsed={collapsed}
-                   onCollapse={(value) => setCollapsed(value)}
-            >
-                <SideMenu />
-            </Sider>
+            { hasMenu &&
+                <Sider style={ style.sider }
+                       collapsible
+                       collapsed={collapsed}
+                       onCollapse={(value) => setCollapsed(value)}
+                >
+                    <SideMenu />
+                </Sider>
+            }
             <Layout>
-                { props.header &&
+                { header &&
                     <Header style={ style.header }>
-                        <h1>{props.header}</h1>
+                        <h1>{header}</h1>
                     </Header>
                 }
                 <Content style={ style.content }>
                     <section style={ style.wrapper }>
-                        {props.children}
+                        {children}
                     </section>
                 </Content>
             </Layout>
