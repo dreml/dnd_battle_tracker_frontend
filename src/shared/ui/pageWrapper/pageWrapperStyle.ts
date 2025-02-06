@@ -1,34 +1,34 @@
-import React from 'react';
+import React from "react";
 
 const sider: React.CSSProperties = {
-    overflow: 'auto',
-    height: '100vh',
-    position: 'sticky',
-    insetInlineStart: 0,
-    top: 0,
-    bottom: 0,
-    scrollbarWidth: 'thin',
-    scrollbarGutter: 'stable'
+  overflow: "auto",
+  height: "100vh",
+  position: "sticky",
+  insetInlineStart: 0,
+  top: 0,
+  bottom: 0,
+  scrollbarWidth: "thin",
+  scrollbarGutter: "stable",
 };
 
 const content: React.CSSProperties = {
-    margin: '24px 16px 0',
-    overflow: 'initial'
-}
+  margin: "24px 16px 0",
+  overflow: "initial",
+};
 
 const wrapper: React.CSSProperties = {
-    padding: 24,
-    background: '#FFF',
-    borderRadius: 4
-}
+  padding: 24,
+  background: "#FFF",
+  borderRadius: 4,
+};
 
 const header: React.CSSProperties = {
-    background: '#FFF'
-}
+  background: "#FFF",
+};
 
 export default {
-    sider,
-    content,
-    wrapper,
-    header
+  sider,
+  content,
+  wrapper,
+  header,
 };
