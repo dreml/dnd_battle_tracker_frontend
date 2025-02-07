@@ -13,19 +13,19 @@ import { ROUTE_CAMPAIGN_LIST, ROUTE_MONSTER_LIST } from "../shared/router";
 const queryClient = new QueryClient();
 
 function App() {
-  return (
-    <BrowserRouter>
-      <StyleProvider layer>
-        <QueryClientProvider client={queryClient}>
-          <Routes>
-            <Route index element={<StartPage />} />
-            <Route path={ROUTE_CAMPAIGN_LIST} element={<CampaignList />} />
-            <Route path={ROUTE_MONSTER_LIST} element={<MonsterList />}></Route>
-          </Routes>
-        </QueryClientProvider>
-      </StyleProvider>
-    </BrowserRouter>
-  );
+	return (
+		<BrowserRouter>
+			<StyleProvider layer>
+				<QueryClientProvider client={queryClient}>
+					<Routes>
+						<Route index element={<StartPage />} />
+						<Route path={ROUTE_CAMPAIGN_LIST} element={<CampaignList />} />
+						<Route path={ROUTE_MONSTER_LIST} element={<MonsterList />}></Route>
+					</Routes>
+				</QueryClientProvider>
+			</StyleProvider>
+		</BrowserRouter>
+	);
 }
 
 export default App;
