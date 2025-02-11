@@ -10,9 +10,9 @@ export interface MonsterI extends MonsterBaseI {
 	armor: number;
 }
 
-export type MonstersT = Array<MonsterBaseI>;
+// export type MonstersT = MonsterBaseI[];
 
-export interface MonstersApiResponseT {
+export interface MonstersApiResponseI {
 	count: number;
-	results: MonstersT;
+	results: MonsterBaseI[];
 }

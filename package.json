@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc -b && vite build",
+		"prettier": "npx prettier . --write",
 		"lint": "eslint .",
 		"preview": "vite preview",
 		"api-server": "json-server mock/db.cjs --routes mock/routes.json --port 3003"

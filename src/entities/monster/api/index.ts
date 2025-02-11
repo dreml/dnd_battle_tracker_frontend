@@ -14,8 +14,4 @@ async function getMonsters(): Promise<MonstersApiResponseT> {
 	return await response.json();
 }
 
-export {
-	getMonsters,
-}
-
-
+export { getMonsters };
