@@ -1,6 +1,6 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
 import { useEffect, useState } from "react";
-import { MonsterBaseI } from "../../entities/monster/model";
+import { MonsterBaseI, MonsterForTableI } from "../../entities/monster/model";
 import { useQuery } from "@tanstack/react-query";
 import { getMonsters } from "../../entities/monster/api";
 import { Table, Button, Flex } from "antd";
@@ -12,9 +12,11 @@ import {
 	DeleteOutlined,
 	PlusCircleOutlined,
 } from "@ant-design/icons";
+import { sortByAlphabet } from "../../shared/lib";
+import useSearchFilter from "../../shared/hook/useSearchFilter";
 
 function MonsterList() {
-	const [monsters, setMonsters] = useState<MonsterBaseI[]>([]);
+	const [monsters, setMonsters] = useState<MonsterForTableI[]>([]);
 
 	const monstersQuery = useQuery({
 		queryKey: ["monsters"],
@@ -23,9 +25,17 @@ function MonsterList() {
 
 	useEffect(() => {
 		if (monstersQuery.data) {
-			setMonsters([...monstersQuery.data.results]);
+			let resultsForTable = monstersQuery.data.results.map(
+				(item: MonsterBaseI) => ({
+					...item,
+					key: item.id,
+				}),
+			);
+			setMonsters([...resultsForTable]);
 		}
 	}, [monstersQuery.data]);
+
+	const getColumnSearchProps = useSearchFilter();
 
 	const columns = [
 		{
@@ -53,6 +63,10 @@ function MonsterList() {
 			dataIndex: "name",
 			key: "name",
 			width: "30%",
+			...getColumnSearchProps("name"),
+			sorter: (a: MonsterBaseI, b: MonsterBaseI) =>
+				sortByAlphabet(a.name, b.name),
+			sortDirections: ["descend", "ascend"],
 		},
 		{
 			title: "Description",
@@ -76,6 +90,7 @@ function MonsterList() {
 				<NavLink to={`${ROUTE_MONSTER_LIST}/new`}>
 					<Button icon={<PlusCircleOutlined />}>Add new</Button>
 				</NavLink>
+				{/*TODO: разобраться, что там с типом для columns*/}
 				<Table<MonsterBaseI> dataSource={monsters} columns={columns} />
 			</Flex>
 		</PageWrapper>
