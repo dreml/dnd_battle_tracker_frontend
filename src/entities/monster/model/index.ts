@@ -14,8 +14,6 @@ export interface MonsterForTableI extends MonsterI {
 	key: string;
 }
 
-// export type MonstersT = MonsterBaseI[];
-
 export interface MonstersApiResponseI {
 	count: number;
 	results: MonsterBaseI[];

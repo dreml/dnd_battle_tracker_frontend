@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { MonsterBaseI, MonsterForTableI } from "../../entities/monster/model";
 import { useQuery } from "@tanstack/react-query";
 import { getMonsters } from "../../entities/monster/api";
-import { Table, Button, Flex } from "antd";
+import { Table, Button, Flex, Spin } from "antd";
 import { SERVER_IMG } from "../../shared/api/config.ts";
 import { NavLink } from "react-router";
 import { ROUTE_MONSTER_LIST } from "../../shared/router";
@@ -85,13 +85,26 @@ function MonsterList() {
 	];
 
 	return (
-		<PageWrapper header="Monster List">
+		<PageWrapper
+			header="Monster List"
+			isError={monstersQuery.isError}
+			errorMessage={monstersQuery.error?.message}
+		>
 			<Flex gap="middle" vertical>
-				<NavLink to={`${ROUTE_MONSTER_LIST}/new`}>
+				<NavLink
+					to={`${ROUTE_MONSTER_LIST}/new`}
+					style={{
+						alignSelf: "flex-start",
+					}}
+				>
 					<Button icon={<PlusCircleOutlined />}>Add new</Button>
 				</NavLink>
 				{/*TODO: разобраться, что там с типом для columns*/}
-				<Table<MonsterBaseI> dataSource={monsters} columns={columns} />
+				{monstersQuery.isPending ? (
+					<Spin size="large" />
+				) : (
+					<Table<MonsterBaseI> dataSource={monsters} columns={columns} />
+				)}
 			</Flex>
 		</PageWrapper>
 	);
