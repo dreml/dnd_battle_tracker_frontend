@@ -8,7 +8,8 @@ import MonsterList from "../pages/monsterList";
 
 import "./app.css";
 
-import { ROUTE_CAMPAIGN_LIST, ROUTE_MONSTER_LIST } from "../shared/router";
+import { CAMPAIGNS, ID, LIBRARY, MONSTERS, NEW } from "../shared/router";
+import MonsterNew from "../pages/monsterNew";
 
 const queryClient = new QueryClient();
 
@@ -19,8 +20,14 @@ function App() {
 				<QueryClientProvider client={queryClient}>
 					<Routes>
 						<Route index element={<StartPage />} />
-						<Route path={ROUTE_CAMPAIGN_LIST} element={<CampaignList />} />
-						<Route path={ROUTE_MONSTER_LIST} element={<MonsterList />}></Route>
+						<Route path={CAMPAIGNS} element={<CampaignList />} />
+						<Route path={LIBRARY}>
+							<Route path={MONSTERS}>
+								<Route index element={<MonsterList />} />
+								<Route path={ID} element={<MonsterNew />} />
+								<Route path={NEW} element={<MonsterNew />} />
+							</Route>
+						</Route>
 					</Routes>
 				</QueryClientProvider>
 			</StyleProvider>

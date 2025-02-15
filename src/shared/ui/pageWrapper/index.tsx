@@ -43,6 +43,7 @@ function PageWrapper({
 	if (isError) {
 		openNotificationWithIcon(NOTIFICATION_TYPES.SUCCESS, "Error", errorMessage);
 	}
+
 	return (
 		<Layout hasSider>
 			{contextHolder}

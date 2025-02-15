@@ -15,8 +15,8 @@ import {
 	ROUTE_BATTLE_LIST,
 	ROUTE_CAMPAIGN_LIST,
 	ROUTE_MONSTER_LIST,
-	ROUTER_CHARACTER_LIST,
-	ROUTER_LIBRARY,
+	ROUTE_CHARACTER_LIST,
+	ROUTE_LIBRARY,
 } from "../../router";
 
 const items: MenuProps["items"] = [
@@ -36,7 +36,7 @@ const items: MenuProps["items"] = [
 		icon: <ThunderboltOutlined />,
 	},
 	{
-		key: ROUTER_LIBRARY,
+		key: ROUTE_LIBRARY,
 		label: "Library",
 		icon: <BookOutlined />,
 		children: [
@@ -46,8 +46,8 @@ const items: MenuProps["items"] = [
 				icon: <BugOutlined />,
 			},
 			{
-				key: ROUTER_CHARACTER_LIST,
-				label: <NavLink to={ROUTER_CHARACTER_LIST}>Characters</NavLink>,
+				key: ROUTE_CHARACTER_LIST,
+				label: <NavLink to={ROUTE_CHARACTER_LIST}>Characters</NavLink>,
 				icon: <UserOutlined />,
 			},
 		],
