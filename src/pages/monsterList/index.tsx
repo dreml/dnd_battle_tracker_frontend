@@ -38,13 +38,13 @@ function MonsterList() {
 
 	const getColumnSearchProps = useSearchFilter<MonsterForTableI>();
 
-	const columns: ColumnsType<MonsterBaseI> = [
+	const columns: ColumnsType<MonsterForTableI> = [
 		{
 			title: "Image",
 			dataIndex: "image",
 			key: "image",
 			width: "15%",
-			render: (image: string, item: MonsterBaseI) => {
+			render: (image: string, item: MonsterForTableI) => {
 				if (image) {
 					return (
 						<img
@@ -60,13 +60,12 @@ function MonsterList() {
 			},
 		},
 		{
-			//TODO: разобраться, что тут с title
 			title: "Name",
 			dataIndex: "name",
 			key: "name",
 			width: "30%",
 			...getColumnSearchProps("name"),
-			sorter: (a: MonsterBaseI, b: MonsterBaseI) =>
+			sorter: (a: MonsterBaseI, b: MonsterForTableI) =>
 				sortByAlphabet(a.name, b.name),
 			sortDirections: ["descend", "ascend"],
 		},
@@ -75,7 +74,7 @@ function MonsterList() {
 			dataIndex: "description",
 			key: "description",
 			width: "30%",
-			render: (_: unknown, item: MonsterBaseI) => (
+			render: (_: unknown, item: MonsterForTableI) => (
 				<Flex gap="small" wrap>
 					<NavLink to={`${ROUTE_MONSTER_LIST}/${item.id}`}>
 						<Button icon={<EditOutlined />} />
@@ -104,7 +103,7 @@ function MonsterList() {
 				{monstersQuery.isPending ? (
 					<Spin size="large" />
 				) : (
-					<Table<MonsterBaseI> dataSource={monsters} columns={columns} />
+					<Table dataSource={monsters} columns={columns} />
 				)}
 			</Flex>
 		</PageWrapper>

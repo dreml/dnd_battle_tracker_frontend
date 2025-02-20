@@ -5,8 +5,8 @@ import type { FilterDropdownProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
 
 //TODO: разобраться с dataIndex, чтобы всегда был string
-
-const useSearchFilter = <T extends { [key: string]: any }>() => {
+function useSearchFilter<T extends Record<string, any>>() {
+	// const useSearchFilter = <T,>() => {
 	const [searchText, setSearchText] = useState("");
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const searchInput = useRef<InputRef>(null);
@@ -26,7 +26,7 @@ const useSearchFilter = <T extends { [key: string]: any }>() => {
 		setSearchText("");
 	};
 
-	return (dataIndex: keyof T): TableColumnType<T> => ({
+	return (dataIndex: string): TableColumnType<T> => ({
 		filterDropdown: ({
 			setSelectedKeys,
 			selectedKeys,
@@ -51,7 +51,11 @@ const useSearchFilter = <T extends { [key: string]: any }>() => {
 					<Button
 						type="primary"
 						onClick={() =>
-							handleSearch(selectedKeys as string[], confirm, dataIndex)
+							handleSearch(
+								selectedKeys as string[],
+								confirm,
+								dataIndex as string,
+							)
 						}
 						icon={<SearchOutlined />}
 						size="small"
@@ -116,6 +120,6 @@ const useSearchFilter = <T extends { [key: string]: any }>() => {
 				text
 			),
 	});
-};
+}
 
 export default useSearchFilter;
