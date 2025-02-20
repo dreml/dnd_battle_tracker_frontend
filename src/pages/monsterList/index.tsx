@@ -14,6 +14,7 @@ import {
 } from "@ant-design/icons";
 import { sortByAlphabet } from "../../shared/lib";
 import useSearchFilter from "../../shared/hook/useSearchFilter";
+import { ColumnsType } from "antd/lib/table";
 
 function MonsterList() {
 	const [monsters, setMonsters] = useState<MonsterForTableI[]>([]);
@@ -35,9 +36,9 @@ function MonsterList() {
 		}
 	}, [monstersQuery.data]);
 
-	const getColumnSearchProps = useSearchFilter();
+	const getColumnSearchProps = useSearchFilter<MonsterForTableI>();
 
-	const columns = [
+	const columns: ColumnsType<MonsterBaseI> = [
 		{
 			title: "Image",
 			dataIndex: "image",
@@ -59,6 +60,7 @@ function MonsterList() {
 			},
 		},
 		{
+			//TODO: разобраться, что тут с title
 			title: "Name",
 			dataIndex: "name",
 			key: "name",
@@ -99,7 +101,6 @@ function MonsterList() {
 				>
 					<Button icon={<PlusCircleOutlined />}>Add new</Button>
 				</NavLink>
-				{/*TODO: разобраться, что там с типом для columns*/}
 				{monstersQuery.isPending ? (
 					<Spin size="large" />
 				) : (

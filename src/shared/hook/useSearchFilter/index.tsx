@@ -1,16 +1,12 @@
-import { useRef, useState, ReactNode } from "react";
-import { Button, Input, InputRef, Space } from "antd";
+import { useRef, useState } from "react";
+import { Button, Input, InputRef, Space, TableColumnType } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import type { FilterDropdownProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
 
-import { MonsterForTableI } from "../../../entities/monster/model";
+//TODO: разобраться с dataIndex, чтобы всегда был string
 
-//TODO: Сделать тип изменяемым
-type DataType = MonsterForTableI;
-type DataIndexT = keyof DataType;
-
-const useSearchFilter = () => {
+const useSearchFilter = <T extends { [key: string]: any }>() => {
 	const [searchText, setSearchText] = useState("");
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const searchInput = useRef<InputRef>(null);
@@ -18,39 +14,19 @@ const useSearchFilter = () => {
 	const handleSearch = (
 		selectedKeys: string[],
 		confirm: FilterDropdownProps["confirm"],
-		dataIndex: DataIndexT,
+		dataIndex: keyof T,
 	) => {
 		confirm();
 		setSearchText(selectedKeys[0]);
-		setSearchedColumn(dataIndex);
+		setSearchedColumn(dataIndex as string);
 	};
 
 	const handleReset = (clearFilters: () => void) => {
 		clearFilters();
 		setSearchText("");
 	};
-	return (
-		dataIndex: DataIndexT,
-	): {
-		//TODO: разобраться с типами для объекта на выходе. Сейчас добавлены автоматически
-		filterDropdown: ({
-			setSelectedKeys,
-			selectedKeys,
-			confirm,
-			clearFilters,
-			close,
-		}: {
-			setSelectedKeys: any;
-			selectedKeys: any;
-			confirm: any;
-			clearFilters: any;
-			close: any;
-		}) => ReactNode;
-		filterIcon: (filtered: boolean) => ReactNode;
-		onFilter: (value: any, record: any) => boolean;
-		render: (text: any) => any;
-		filterDropdownProps: { onOpenChange(open: any): void };
-	} => ({
+
+	return (dataIndex: keyof T): TableColumnType<T> => ({
 		filterDropdown: ({
 			setSelectedKeys,
 			selectedKeys,
@@ -118,9 +94,9 @@ const useSearchFilter = () => {
 		),
 		onFilter: (value, record) =>
 			record[dataIndex]
-				.toString()
+				?.toString()
 				.toLowerCase()
-				.includes((value as string).toLowerCase()),
+				.includes((value as string).toLowerCase()) || false,
 		filterDropdownProps: {
 			onOpenChange(open) {
 				if (open) {
