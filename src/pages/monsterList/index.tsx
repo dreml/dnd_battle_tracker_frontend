@@ -14,6 +14,7 @@ import {
 } from "@ant-design/icons";
 import { sortByAlphabet } from "../../shared/lib";
 import useSearchFilter from "../../shared/hook/useSearchFilter";
+import { ColumnsType } from "antd/lib/table";
 
 function MonsterList() {
 	const [monsters, setMonsters] = useState<MonsterForTableI[]>([]);
@@ -35,15 +36,15 @@ function MonsterList() {
 		}
 	}, [monstersQuery.data]);
 
-	const getColumnSearchProps = useSearchFilter();
+	const getColumnSearchProps = useSearchFilter<MonsterForTableI>();
 
-	const columns = [
+	const columns: ColumnsType<MonsterForTableI> = [
 		{
 			title: "Image",
 			dataIndex: "image",
 			key: "image",
 			width: "15%",
-			render: (image: string, item: MonsterBaseI) => {
+			render: (image: string, item: MonsterForTableI) => {
 				if (image) {
 					return (
 						<img
@@ -64,7 +65,7 @@ function MonsterList() {
 			key: "name",
 			width: "30%",
 			...getColumnSearchProps("name"),
-			sorter: (a: MonsterBaseI, b: MonsterBaseI) =>
+			sorter: (a: MonsterBaseI, b: MonsterForTableI) =>
 				sortByAlphabet(a.name, b.name),
 			sortDirections: ["descend", "ascend"],
 		},
@@ -73,7 +74,7 @@ function MonsterList() {
 			dataIndex: "description",
 			key: "description",
 			width: "30%",
-			render: (_: unknown, item: MonsterBaseI) => (
+			render: (_: unknown, item: MonsterForTableI) => (
 				<Flex gap="small" wrap>
 					<NavLink to={`${ROUTE_MONSTER_LIST}/${item.id}`}>
 						<Button icon={<EditOutlined />} />
@@ -99,11 +100,10 @@ function MonsterList() {
 				>
 					<Button icon={<PlusCircleOutlined />}>Add new</Button>
 				</NavLink>
-				{/*TODO: разобраться, что там с типом для columns*/}
 				{monstersQuery.isPending ? (
 					<Spin size="large" />
 				) : (
-					<Table<MonsterBaseI> dataSource={monsters} columns={columns} />
+					<Table dataSource={monsters} columns={columns} />
 				)}
 			</Flex>
 		</PageWrapper>
