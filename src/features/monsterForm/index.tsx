@@ -1,18 +1,13 @@
 import { Button, Flex, Form, Input, InputNumber, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { SERVER } from "../../shared/config/api.ts";
+import { MonsterI, MonsterNewT } from "../../entities/monster/model";
+
+type FormValuesT = MonsterNewT | MonsterI;
 
 type MonsterFormT = {
-	onSubmit?: (form: MonsterFormT) => void;
+	onSubmit?: (data: FormValuesT) => void;
 	initialValues?: MonsterFormT;
-};
-
-//TODO: вынести конфигурацию в отдельный файл и <ConfigProvider form={{ validateMessages }}>
-const validateMessages = {
-	required: "${label} is required",
-	number: {
-		min: "${label} must be minimum ${min}",
-		max: "${label} must be maximum ${max}",
-	},
 };
 
 function MonsterForm({
@@ -21,8 +16,7 @@ function MonsterForm({
 }: MonsterFormT) {
 	const [form] = Form.useForm();
 
-	const onFinish = (values: MonsterFormT) => {
-		console.log(values);
+	const onFinish = (values: FormValuesT) => {
 		onSubmit?.(values);
 	};
 
@@ -33,7 +27,6 @@ function MonsterForm({
 			initialValues={initialValues}
 			layout={"horizontal"}
 			style={{ maxWidth: 600 }}
-			validateMessages={validateMessages}
 		>
 			<Form.Item
 				name="name"
@@ -72,7 +65,11 @@ function MonsterForm({
 			</Flex>
 
 			<Form.Item name="image" label="Image" valuePropName="image">
-				<Upload listType="picture-card" maxCount={1}>
+				<Upload
+					listType="picture-card"
+					maxCount={1}
+					action={`${SERVER}/upload`}
+				>
 					<button style={{ border: 0, background: "none" }} type="button">
 						<PlusOutlined />
 						<div style={{ marginTop: 8 }}>Upload</div>

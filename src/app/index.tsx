@@ -10,6 +10,8 @@ import "./app.css";
 
 import { CAMPAIGNS, ID, LIBRARY, MONSTERS, NEW } from "../shared/router";
 import MonsterNew from "../pages/monsterNew";
+import { ConfigProvider } from "antd";
+import { validateMessages } from "../shared/config/form.ts";
 
 const queryClient = new QueryClient();
 
@@ -18,17 +20,19 @@ function App() {
 		<BrowserRouter>
 			<StyleProvider layer>
 				<QueryClientProvider client={queryClient}>
-					<Routes>
-						<Route index element={<StartPage />} />
-						<Route path={CAMPAIGNS} element={<CampaignList />} />
-						<Route path={LIBRARY}>
-							<Route path={MONSTERS}>
-								<Route index element={<MonsterList />} />
-								<Route path={ID} element={<MonsterNew />} />
-								<Route path={NEW} element={<MonsterNew />} />
+					<ConfigProvider form={{ validateMessages }}>
+						<Routes>
+							<Route index element={<StartPage />} />
+							<Route path={CAMPAIGNS} element={<CampaignList />} />
+							<Route path={LIBRARY}>
+								<Route path={MONSTERS}>
+									<Route index element={<MonsterList />} />
+									<Route path={ID} element={<MonsterNew />} />
+									<Route path={NEW} element={<MonsterNew />} />
+								</Route>
 							</Route>
-						</Route>
-					</Routes>
+						</Routes>
+					</ConfigProvider>
 				</QueryClientProvider>
 			</StyleProvider>
 		</BrowserRouter>

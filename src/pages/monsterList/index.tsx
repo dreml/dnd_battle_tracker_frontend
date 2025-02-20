@@ -4,7 +4,7 @@ import { MonsterBaseI, MonsterForTableI } from "../../entities/monster/model";
 import { useQuery } from "@tanstack/react-query";
 import { getMonsters } from "../../entities/monster/api";
 import { Table, Button, Flex, Spin } from "antd";
-import { SERVER_IMG } from "../../shared/api/config.ts";
+import { SERVER_IMG } from "../../shared/config/api.ts";
 import { NavLink } from "react-router";
 import { ROUTE_MONSTER_LIST } from "../../shared/router";
 import {
