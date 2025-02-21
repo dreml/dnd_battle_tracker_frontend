@@ -12,6 +12,7 @@ import { CAMPAIGNS, ID, LIBRARY, MONSTERS, NEW } from "../shared/router";
 import MonsterNew from "../pages/monsterNew";
 import { ConfigProvider } from "antd";
 import { validateMessages } from "../shared/config/form.ts";
+import MonsterEdit from "../pages/monsterEdit";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +28,7 @@ function App() {
 							<Route path={LIBRARY}>
 								<Route path={MONSTERS}>
 									<Route index element={<MonsterList />} />
-									<Route path={ID} element={<MonsterNew />} />
+									<Route path={ID} element={<MonsterEdit />} />
 									<Route path={NEW} element={<MonsterNew />} />
 								</Route>
 							</Route>

@@ -1,5 +1,5 @@
 import { SERVER, URL_MONSTERS } from "../../../shared/config/api.ts";
-import { MonsterNewT, MonstersApiResponseI } from "../model";
+import { MonsterI, MonsterNewT, MonstersApiResponseI } from "../model";
 
 async function getMonsters(): Promise<MonstersApiResponseI> {
 	let response = await fetch(`${SERVER}${URL_MONSTERS}`, {
@@ -29,5 +29,17 @@ async function addNewMonster(data: MonsterNewT) {
 	return await response.json();
 }
 
-// async function getMonster(id: string): Promise<MonstersApiResponseI> {}
-export { getMonsters, addNewMonster };
+async function getMonster(id: string): Promise<MonsterI> {
+	let response = await fetch(`${SERVER}${URL_MONSTERS}/${id}`, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		},
+	});
+	if (!response.ok) {
+		throw new Error(response.statusText);
+	}
+	return await response.json();
+}
+export { getMonsters, addNewMonster, getMonster };

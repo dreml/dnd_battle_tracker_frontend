@@ -7,24 +7,21 @@ type FormValuesT = MonsterNewT | MonsterI;
 
 type MonsterFormT = {
 	onSubmit?: (data: FormValuesT) => void;
-	initialValues?: MonsterFormT;
+	initialValues?: MonsterI;
 };
 
-function MonsterForm({
-	onSubmit = () => {},
-	initialValues = {},
-}: MonsterFormT) {
+function MonsterForm(props: MonsterFormT) {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: FormValuesT) => {
-		onSubmit?.(values);
+		props.onSubmit?.(values);
 	};
 
 	return (
 		<Form
 			form={form}
 			onFinish={onFinish}
-			initialValues={initialValues}
+			initialValues={props.initialValues || {}}
 			layout={"horizontal"}
 			style={{ maxWidth: 600 }}
 		>

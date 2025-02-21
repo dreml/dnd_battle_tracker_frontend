@@ -9,6 +9,9 @@ export const ID = ":id";
 export const ROUTE_LIBRARY = `/${LIBRARY}`;
 export const ROUTE_MONSTER_LIST = `${ROUTE_LIBRARY}/${MONSTERS}`;
 export const ROUTE_MONSTER_NEW = `${ROUTE_MONSTER_LIST}/${NEW}`;
+export const getRouteMonsterEdit = (id: string) =>
+	`${ROUTE_MONSTER_LIST}/${id}`;
+
 export const ROUTE_CHARACTER_LIST = `/${CHARACTERS}`;
 export const ROUTE_CAMPAIGN_LIST = `/${CAMPAIGNS}`;
 export const ROUTE_BATTLE_LIST = `/${BATTLES}`;

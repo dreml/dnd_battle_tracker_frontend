@@ -6,7 +6,7 @@ import { getMonsters } from "../../entities/monster/api";
 import { Table, Button, Flex, Spin } from "antd";
 import { SERVER_IMG } from "../../shared/config/api.ts";
 import { NavLink } from "react-router";
-import { ROUTE_MONSTER_LIST } from "../../shared/router";
+import { getRouteMonsterEdit, ROUTE_MONSTER_LIST } from "../../shared/router";
 import {
 	EditOutlined,
 	DeleteOutlined,
@@ -32,7 +32,8 @@ function MonsterList() {
 					key: item.id,
 				}),
 			);
-			setMonsters([...resultsForTable]);
+			//TODO: как правильно обрабатывать преобразование данных и расширение типов при этом
+			setMonsters([...(resultsForTable as MonsterForTableI[])]);
 		}
 	}, [monstersQuery.data]);
 
@@ -76,7 +77,7 @@ function MonsterList() {
 			width: "30%",
 			render: (_: unknown, item: MonsterForTableI) => (
 				<Flex gap="small" wrap>
-					<NavLink to={`${ROUTE_MONSTER_LIST}/${item.id}`}>
+					<NavLink to={getRouteMonsterEdit(item.id)}>
 						<Button icon={<EditOutlined />} />
 					</NavLink>
 					<Button icon={<DeleteOutlined />} />

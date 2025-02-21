@@ -8,6 +8,8 @@ export interface MonsterBaseI {
 export interface MonsterI extends MonsterBaseI {
 	health: number;
 	armor: number;
+	dateCreated: number;
+	dateUpdated: number;
 }
 
 export interface MonsterForTableI extends MonsterI {
