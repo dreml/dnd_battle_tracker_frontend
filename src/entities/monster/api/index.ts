@@ -42,4 +42,17 @@ async function getMonster(id: string): Promise<MonsterI> {
 	}
 	return await response.json();
 }
-export { getMonsters, addNewMonster, getMonster };
+async function deleteMonster(id: string): Promise<void> {
+	let response = await fetch(`${SERVER}${URL_MONSTERS}/${id}`, {
+		method: "DELETE",
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		},
+	});
+	if (!response.ok) {
+		throw new Error(response.statusText);
+	}
+	return await response.json();
+}
+export { getMonsters, addNewMonster, getMonster, deleteMonster };
