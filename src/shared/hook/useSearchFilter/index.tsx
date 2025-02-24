@@ -5,7 +5,7 @@ import type { FilterDropdownProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
 
 //TODO: разобраться с dataIndex, чтобы всегда был string
-function useSearchFilter<T extends Record<string, unknown>>(): (
+function useSearchFilter<T extends Record<string, any>>(): (
 	dataIndex: string,
 ) => TableColumnType<T> {
 	const [searchText, setSearchText] = useState("");

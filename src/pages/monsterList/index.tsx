@@ -1,7 +1,7 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
 import { MonsterBaseI } from "../../entities/monster/model";
-import { useQuery } from "@tanstack/react-query";
-import { getMonsters } from "../../entities/monster/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteMonster, getMonsters } from "../../entities/monster/api";
 import { Table, Button, Flex, Spin } from "antd";
 import { SERVER_IMG } from "../../shared/api/config.ts";
 import { NavLink } from "react-router";
@@ -16,13 +16,17 @@ import useSearchFilter from "../../shared/hook/useSearchFilter";
 import { ColumnsType } from "antd/lib/table";
 
 function MonsterList() {
-	// const [monsters, setMonsters] = useState<MonsterBaseI[]>([]);
+	const queryClient = useQueryClient();
 
 	const monstersQuery = useQuery({
 		queryKey: ["monsters"],
 		queryFn: getMonsters,
 	});
-
+	const deleteMutation = useMutation({
+		mutationFn: (id: string) => deleteMonster(id),
+		onSuccess: () =>
+			void queryClient.invalidateQueries({ queryKey: ["monsters"] }),
+	});
 	const monsters: MonsterBaseI[] = monstersQuery.data?.results ?? [];
 
 	const getColumnSearchProps = useSearchFilter<MonsterBaseI>();
@@ -44,7 +48,7 @@ function MonsterList() {
 						/>
 					);
 				} else {
-					return <div />;
+					return null;
 				}
 			},
 		},
@@ -68,7 +72,10 @@ function MonsterList() {
 					<NavLink to={`${ROUTE_MONSTER_LIST}/${item.id}`}>
 						<Button icon={<EditOutlined />} />
 					</NavLink>
-					<Button icon={<DeleteOutlined />} />
+					<Button
+						icon={<DeleteOutlined />}
+						onClick={() => deleteMutation.mutate(item.id)}
+					/>
 				</Flex>
 			),
 		},
@@ -77,8 +84,10 @@ function MonsterList() {
 	return (
 		<PageWrapper
 			header="Monster List"
-			isError={monstersQuery.isError}
-			errorMessage={monstersQuery.error?.message}
+			isError={monstersQuery.isError || deleteMutation.isError}
+			errorMessage={
+				monstersQuery.error?.message || deleteMutation.error?.message
+			}
 		>
 			<Flex gap="middle" vertical>
 				<NavLink
