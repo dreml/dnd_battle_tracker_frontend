@@ -18,7 +18,7 @@ function MonsterNew() {
 		monsterNewMutation.mutate(data);
 	};
 	return (
-		<PageWrapper header="New Monster">
+		<PageWrapper header="Новый монстр">
 			<MonsterForm
 				onSubmit={onSubmit}
 				isDisabled={monsterNewMutation.isPending}

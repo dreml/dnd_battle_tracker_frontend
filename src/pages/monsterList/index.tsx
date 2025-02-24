@@ -33,7 +33,7 @@ function MonsterList() {
 
 	const columns: ColumnsType<MonsterBaseI> = [
 		{
-			title: "Image",
+			title: "Изображение",
 			dataIndex: "image",
 			key: "image",
 			width: "15%",
@@ -53,17 +53,17 @@ function MonsterList() {
 			},
 		},
 		{
-			title: "Name",
+			title: "Имя",
 			dataIndex: "name",
 			key: "name",
 			width: "30%",
-			...getColumnSearchProps("name"),
+			...getColumnSearchProps("name", "имя"),
 			sorter: (a: MonsterBaseI, b: MonsterBaseI) =>
 				sortByAlphabet(a.name, b.name),
 			sortDirections: ["descend", "ascend"],
 		},
 		{
-			title: "Description",
+			title: "",
 			dataIndex: "description",
 			key: "description",
 			width: "30%",
@@ -83,7 +83,7 @@ function MonsterList() {
 
 	return (
 		<PageWrapper
-			header="Monster List"
+			header="Монстры"
 			isError={monstersQuery.isError || deleteMutation.isError}
 			errorMessage={
 				monstersQuery.error?.message || deleteMutation.error?.message
@@ -96,7 +96,7 @@ function MonsterList() {
 						alignSelf: "flex-start",
 					}}
 				>
-					<Button icon={<PlusCircleOutlined />}>Add new</Button>
+					<Button icon={<PlusCircleOutlined />}>Создать</Button>
 				</NavLink>
 				{monstersQuery.isPending ? (
 					<Spin size="large" />

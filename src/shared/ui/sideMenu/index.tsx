@@ -22,39 +22,39 @@ import {
 const items: MenuProps["items"] = [
 	{
 		key: "/",
-		label: <NavLink to="/">Home</NavLink>,
+		label: <NavLink to="/">Домой</NavLink>,
 		icon: <HomeOutlined />,
 	},
 	{
 		key: ROUTE_CAMPAIGN_LIST,
-		label: <NavLink to={ROUTE_CAMPAIGN_LIST}>Campaigns</NavLink>,
+		label: <NavLink to={ROUTE_CAMPAIGN_LIST}>Кампании</NavLink>,
 		icon: <BuildOutlined />,
 	},
 	{
 		key: ROUTE_BATTLE_LIST,
-		label: <NavLink to={ROUTE_BATTLE_LIST}>Battles</NavLink>,
+		label: <NavLink to={ROUTE_BATTLE_LIST}>Бои</NavLink>,
 		icon: <ThunderboltOutlined />,
 	},
 	{
 		key: ROUTE_LIBRARY,
-		label: "Library",
+		label: "Библиотека",
 		icon: <BookOutlined />,
 		children: [
 			{
 				key: ROUTE_MONSTER_LIST,
-				label: <NavLink to={ROUTE_MONSTER_LIST}>Monsters</NavLink>,
+				label: <NavLink to={ROUTE_MONSTER_LIST}>Монстры</NavLink>,
 				icon: <BugOutlined />,
 			},
 			{
 				key: ROUTE_CHARACTER_LIST,
-				label: <NavLink to={ROUTE_CHARACTER_LIST}>Characters</NavLink>,
+				label: <NavLink to={ROUTE_CHARACTER_LIST}>Персонажи</NavLink>,
 				icon: <UserOutlined />,
 			},
 		],
 	},
 	{
 		key: ROUTE_ACTIVE_CAMPAIGN,
-		label: <NavLink to={ROUTE_ACTIVE_CAMPAIGN}>Active campaign</NavLink>,
+		label: <NavLink to={ROUTE_ACTIVE_CAMPAIGN}>К активной кампании</NavLink>,
 		icon: <PlayCircleOutlined />,
 	},
 ];

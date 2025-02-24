@@ -31,7 +31,7 @@ function MonsterForm(props: MonsterFormT) {
 		>
 			<Form.Item
 				name="name"
-				label="Name"
+				label="Имя"
 				rules={[{ required: true, max: 50, type: "string" }]}
 			>
 				<Input />
@@ -44,7 +44,7 @@ function MonsterForm(props: MonsterFormT) {
 				>
 					<Form.Item
 						name="health"
-						label="Health"
+						label="Здоровье"
 						rules={[{ required: true, type: "integer", min: 0 }]}
 					>
 						<InputNumber />
@@ -57,7 +57,7 @@ function MonsterForm(props: MonsterFormT) {
 				>
 					<Form.Item
 						name="armor"
-						label="Armor"
+						label="Защита"
 						rules={[{ required: true, type: "integer", min: 0 }]}
 					>
 						<InputNumber />
@@ -65,7 +65,7 @@ function MonsterForm(props: MonsterFormT) {
 				</div>
 			</Flex>
 
-			<Form.Item name="image" label="Image" valuePropName="image">
+			<Form.Item name="image" label="Изображение" valuePropName="image">
 				<Upload
 					listType="picture-card"
 					maxCount={1}
@@ -73,14 +73,14 @@ function MonsterForm(props: MonsterFormT) {
 				>
 					<button style={{ border: 0, background: "none" }} type="button">
 						<PlusOutlined />
-						<div style={{ marginTop: 8 }}>Upload</div>
+						<div style={{ marginTop: 8 }}>Загрузить</div>
 					</button>
 				</Upload>
 			</Form.Item>
 			<Form.Item>
 				<Flex gap={"small"} align={"center"}>
 					<Button type="primary" htmlType="submit">
-						Submit
+						Сохранить
 					</Button>
 					{(props?.isPending || false) && <Spin />}
 				</Flex>

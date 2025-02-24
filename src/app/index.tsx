@@ -5,13 +5,12 @@ import { StyleProvider } from "@ant-design/cssinjs";
 import StartPage from "../pages/startPage";
 import CampaignList from "../pages/campaignList";
 import MonsterList from "../pages/monsterList";
-
+import Locale from "antd/locale/ru_RU";
 import "./app.css";
 
 import { CAMPAIGNS, ID, LIBRARY, MONSTERS, NEW } from "../shared/router";
 import MonsterNew from "../pages/monsterNew";
 import { ConfigProvider } from "antd";
-import { validateMessages } from "../shared/config/form.ts";
 import MonsterEdit from "../pages/monsterEdit";
 
 const queryClient = new QueryClient();
@@ -21,7 +20,7 @@ function App() {
 		<BrowserRouter>
 			<StyleProvider layer>
 				<QueryClientProvider client={queryClient}>
-					<ConfigProvider form={{ validateMessages }}>
+					<ConfigProvider locale={Locale}>
 						<Routes>
 							<Route index element={<StartPage />} />
 							<Route path={CAMPAIGNS} element={<CampaignList />} />

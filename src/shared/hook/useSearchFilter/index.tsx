@@ -7,6 +7,7 @@ import Highlighter from "react-highlight-words";
 //TODO: разобраться с dataIndex, чтобы всегда был string
 function useSearchFilter<T extends Record<string, any>>(): (
 	dataIndex: string,
+	fieldName: string,
 ) => TableColumnType<T> {
 	const [searchText, setSearchText] = useState("");
 	const [searchedColumn, setSearchedColumn] = useState<keyof T>("");
@@ -27,7 +28,7 @@ function useSearchFilter<T extends Record<string, any>>(): (
 		setSearchText("");
 	};
 
-	return (dataIndex: string): TableColumnType<T> => ({
+	return (dataIndex: string, fieldName: string): TableColumnType<T> => ({
 		filterDropdown: ({
 			setSelectedKeys,
 			selectedKeys,
@@ -38,7 +39,7 @@ function useSearchFilter<T extends Record<string, any>>(): (
 			<div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
 				<Input
 					ref={searchInput}
-					placeholder={`Search ${dataIndex}`}
+					placeholder={`Ищем ${fieldName}`}
 					value={selectedKeys[0]}
 					onChange={(e) =>
 						setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -58,25 +59,14 @@ function useSearchFilter<T extends Record<string, any>>(): (
 						size="small"
 						style={{ width: 90 }}
 					>
-						Search
+						Поиск
 					</Button>
 					<Button
 						onClick={() => clearFilters && handleReset(clearFilters)}
 						size="small"
 						style={{ width: 90 }}
 					>
-						Reset
-					</Button>
-					<Button
-						type="link"
-						size="small"
-						onClick={() => {
-							confirm({ closeDropdown: false });
-							setSearchText((selectedKeys as string[])[0]);
-							setSearchedColumn(dataIndex);
-						}}
-					>
-						Filter
+						Сброс
 					</Button>
 					<Button
 						type="link"
@@ -85,7 +75,7 @@ function useSearchFilter<T extends Record<string, any>>(): (
 							close();
 						}}
 					>
-						close
+						закрыть
 					</Button>
 				</Space>
 			</div>

@@ -27,7 +27,7 @@ function MonsterEdit() {
 
 	return (
 		<PageWrapper
-			header="Monster edit"
+			header={monster?.name || "Загружаем..."}
 			isError={monsterQuery.isError || editMutation.isError}
 			errorMessage={monsterQuery.error?.message || editMutation.error?.message}
 		>
