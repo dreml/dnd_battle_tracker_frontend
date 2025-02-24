@@ -1,13 +1,16 @@
-import { Button, Flex, Form, Input, InputNumber, Upload } from "antd";
+import { Button, Flex, Form, Input, InputNumber, Spin, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { SERVER } from "../../shared/config/api.ts";
 import { MonsterI, MonsterNewT } from "../../entities/monster/model";
+import { useEffect } from "react";
 
 type FormValuesT = MonsterNewT | MonsterI;
 
 type MonsterFormT = {
 	onSubmit?: (data: FormValuesT) => void;
 	initialValues?: MonsterI;
+	isDisabled?: boolean;
+	isPending?: boolean;
 };
 
 function MonsterForm(props: MonsterFormT) {
@@ -16,7 +19,7 @@ function MonsterForm(props: MonsterFormT) {
 	const onFinish = (values: FormValuesT) => {
 		props.onSubmit?.(values);
 	};
-
+	useEffect(() => form.resetFields(), [props.initialValues]);
 	return (
 		<Form
 			form={form}
@@ -24,6 +27,7 @@ function MonsterForm(props: MonsterFormT) {
 			initialValues={props.initialValues || {}}
 			layout={"horizontal"}
 			style={{ maxWidth: 600 }}
+			disabled={props?.isDisabled || false}
 		>
 			<Form.Item
 				name="name"
@@ -74,9 +78,12 @@ function MonsterForm(props: MonsterFormT) {
 				</Upload>
 			</Form.Item>
 			<Form.Item>
-				<Button type="primary" htmlType="submit">
-					Submit
-				</Button>
+				<Flex gap={"small"} align={"center"}>
+					<Button type="primary" htmlType="submit">
+						Submit
+					</Button>
+					{(props?.isPending || false) && <Spin />}
+				</Flex>
 			</Form.Item>
 		</Form>
 	);

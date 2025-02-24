@@ -12,10 +12,6 @@ export interface MonsterI extends MonsterBaseI {
 	dateUpdated: number;
 }
 
-export interface MonsterForTableI extends MonsterI {
-	key: string;
-}
-
 export type MonsterNewT = Omit<MonsterI, "id">;
 
 export interface MonstersApiResponseI {

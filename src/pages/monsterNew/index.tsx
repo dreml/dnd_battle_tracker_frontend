@@ -3,7 +3,6 @@ import MonsterForm from "../../features/monsterForm";
 import { useMutation } from "@tanstack/react-query";
 import { MonsterNewT } from "../../entities/monster/model";
 import { addNewMonster } from "../../entities/monster/api";
-import { Spin } from "antd";
 import { useNavigate } from "react-router";
 import { ROUTE_MONSTER_LIST } from "../../shared/router";
 
@@ -20,11 +19,11 @@ function MonsterNew() {
 	};
 	return (
 		<PageWrapper header="New Monster">
-			{monsterNewMutation.isPending ? (
-				<Spin size="large" />
-			) : (
-				<MonsterForm onSubmit={onSubmit} />
-			)}
+			<MonsterForm
+				onSubmit={onSubmit}
+				isDisabled={monsterNewMutation.isPending}
+				isPending={monsterNewMutation.isPending}
+			/>
 		</PageWrapper>
 	);
 }

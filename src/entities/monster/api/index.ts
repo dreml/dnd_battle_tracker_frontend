@@ -42,6 +42,7 @@ async function getMonster(id: string): Promise<MonsterI> {
 	}
 	return await response.json();
 }
+
 async function deleteMonster(id: string): Promise<void> {
 	let response = await fetch(`${SERVER}${URL_MONSTERS}/${id}`, {
 		method: "DELETE",
@@ -55,4 +56,19 @@ async function deleteMonster(id: string): Promise<void> {
 	}
 	return await response.json();
 }
-export { getMonsters, addNewMonster, getMonster, deleteMonster };
+
+async function updateMonster(id: string, data: MonsterNewT): Promise<MonsterI> {
+	let response = await fetch(`${SERVER}${URL_MONSTERS}/${id}`, {
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		},
+		body: JSON.stringify(data),
+	});
+	if (!response.ok) {
+		throw new Error(response.statusText);
+	}
+	return await response.json();
+}
+export { getMonsters, addNewMonster, getMonster, deleteMonster, updateMonster };
