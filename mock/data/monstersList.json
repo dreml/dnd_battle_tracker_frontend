@@ -1,0 +1,379 @@
+{
+	"count": 334,
+	"results": [
+		{
+			"id": "aboleth",
+			"name": "Aboleth",
+			"image": "/api/images/monsters/aboleth.png"
+		},
+		{
+			"id": "acolyte",
+			"name": "Acolyte"
+		},
+		{
+			"id": "adult-black-dragon",
+			"name": "Adult Black Dragon",
+			"image": "/api/images/monsters/adult-black-dragon.png"
+		},
+		{
+			"id": "adult-blue-dragon",
+			"name": "Adult Blue Dragon",
+			"image": "/api/images/monsters/adult-blue-dragon.png"
+		},
+		{
+			"id": "adult-brass-dragon",
+			"name": "Adult Brass Dragon",
+			"image": "/api/images/monsters/adult-brass-dragon.png"
+		},
+		{
+			"id": "adult-bronze-dragon",
+			"name": "Adult Bronze Dragon",
+			"image": "/api/images/monsters/adult-bronze-dragon.png"
+		},
+		{
+			"id": "adult-copper-dragon",
+			"name": "Adult Copper Dragon",
+			"image": "/api/images/monsters/adult-copper-dragon.png"
+		},
+		{
+			"id": "adult-gold-dragon",
+			"name": "Adult Gold Dragon",
+			"image": "/api/images/monsters/adult-gold-dragon.png"
+		},
+		{
+			"id": "adult-green-dragon",
+			"name": "Adult Green Dragon",
+			"image": "/api/images/monsters/adult-green-dragon.png"
+		},
+		{
+			"id": "adult-red-dragon",
+			"name": "Adult Red Dragon",
+			"image": "/api/images/monsters/adult-red-dragon.png"
+		},
+		{
+			"id": "adult-silver-dragon",
+			"name": "Adult Silver Dragon",
+			"image": "/api/images/monsters/adult-silver-dragon.png"
+		},
+		{
+			"id": "adult-white-dragon",
+			"name": "Adult White Dragon",
+			"image": "/api/images/monsters/adult-white-dragon.png"
+		},
+		{
+			"id": "air-elemental",
+			"name": "Air Elemental",
+			"image": "/api/images/monsters/air-elemental.png"
+		},
+		{
+			"id": "ancient-black-dragon",
+			"name": "Ancient Black Dragon",
+			"image": "/api/images/monsters/ancient-black-dragon.png"
+		},
+		{
+			"id": "ancient-blue-dragon",
+			"name": "Ancient Blue Dragon",
+			"image": "/api/images/monsters/ancient-blue-dragon.png"
+		},
+		{
+			"id": "ancient-brass-dragon",
+			"name": "Ancient Brass Dragon",
+			"image": "/api/images/monsters/ancient-brass-dragon.png"
+		},
+		{
+			"id": "ancient-bronze-dragon",
+			"name": "Ancient Bronze Dragon",
+			"image": "/api/images/monsters/ancient-bronze-dragon.png"
+		},
+		{
+			"id": "ancient-copper-dragon",
+			"name": "Ancient Copper Dragon",
+			"image": "/api/images/monsters/ancient-copper-dragon.png"
+		},
+		{
+			"id": "ancient-gold-dragon",
+			"name": "Ancient Gold Dragon",
+			"image": "/api/images/monsters/ancient-gold-dragon.png"
+		},
+		{
+			"id": "ancient-green-dragon",
+			"name": "Ancient Green Dragon",
+			"image": "/api/images/monsters/ancient-green-dragon.png"
+		},
+		{
+			"id": "ancient-red-dragon",
+			"name": "Ancient Red Dragon",
+			"image": "/api/images/monsters/ancient-red-dragon.png"
+		},
+		{
+			"id": "ancient-silver-dragon",
+			"name": "Ancient Silver Dragon",
+			"image": "/api/images/monsters/ancient-silver-dragon.png"
+		},
+		{
+			"id": "bandit",
+			"name": "Bandit",
+			"image": "/api/images/monsters/bandit.png"
+		},
+		{
+			"id": "bandit-captain",
+			"name": "Bandit Captain",
+			"image": "/api/images/monsters/bandit-captain.png"
+		},
+		{
+			"id": "barbed-devil",
+			"name": "Barbed Devil",
+			"image": "/api/images/monsters/barbed-devil.png"
+		},
+		{
+			"id": "basilisk",
+			"name": "Basilisk",
+			"image": "/api/images/monsters/basilisk.png"
+		},
+		{
+			"id": "bat",
+			"name": "Bat",
+			"image": "/api/images/monsters/bat.png"
+		},
+		{
+			"id": "bearded-devil",
+			"name": "Bearded Devil",
+			"image": "/api/images/monsters/bearded-devil.png"
+		},
+		{
+			"id": "behir",
+			"name": "Behir",
+			"image": "/api/images/monsters/behir.png"
+		},
+		{
+			"id": "berserker",
+			"name": "Berserker",
+			"image": "/api/images/monsters/berserker.png"
+		},
+		{
+			"id": "black-bear",
+			"name": "Black Bear",
+			"image": "/api/images/monsters/black-bear.png"
+		},
+		{
+			"id": "black-dragon-wyrmling",
+			"name": "Black Dragon Wyrmling",
+			"image": "/api/images/monsters/black-dragon-wyrmling.png"
+		},
+		{
+			"id": "black-pudding",
+			"name": "Black Pudding",
+			"image": "/api/images/monsters/black-pudding.png"
+		},
+		{
+			"id": "cat",
+			"name": "Cat",
+			"image": "/api/images/monsters/cat.png"
+		},
+		{
+			"id": "centaur",
+			"name": "Centaur",
+			"image": "/api/images/monsters/centaur.png"
+		},
+		{
+			"id": "chain-devil",
+			"name": "Chain Devil",
+			"image": "/api/images/monsters/chain-devi.pngl"
+		},
+		{
+			"id": "chimera",
+			"name": "Chimera",
+			"image": "/api/images/monsters/chimera.png"
+		},
+		{
+			"id": "chuul",
+			"name": "Chuul",
+			"image": "/api/images/monsters/chuul.png"
+		},
+		{
+			"id": "djinni",
+			"name": "Djinni",
+			"image": "/api/images/monsters/djinni.png"
+		},
+		{
+			"id": "doppelganger",
+			"name": "Doppelganger",
+			"image": "/api/images/monsters/doppelganger.png"
+		},
+		{
+			"id": "draft-horse",
+			"name": "Draft Horse",
+			"image": "/api/images/monsters/draft-horse.png"
+		},
+		{
+			"id": "dragon-turtle",
+			"name": "Dragon Turtle",
+			"image": "/api/images/monsters/dragon-turtle.png"
+		},
+		{
+			"id": "dretch",
+			"name": "Dretch",
+			"image": "/api/images/monsters/dretch.png"
+		},
+		{
+			"id": "drider",
+			"name": "Drider",
+			"image": "/api/images/monsters/drider.png"
+		},
+		{
+			"id": "erinyes",
+			"name": "Erinyes",
+			"image": "/api/images/monsters/erinyes.png"
+		},
+		{
+			"id": "ettercap",
+			"name": "Ettercap",
+			"image": "/api/images/monsters/ettercap.png"
+		},
+		{
+			"id": "ettin",
+			"name": "Ettin",
+			"image": "/api/images/monsters/ettin.png"
+		},
+		{
+			"id": "fire-elemental",
+			"name": "Fire Elemental",
+			"image": "/api/images/monsters/fire-elemental.png"
+		},
+		{
+			"id": "fire-giant",
+			"name": "Fire Giant",
+			"image": "/api/images/monsters/fire-giant.png"
+		},
+		{
+			"id": "flesh-golem",
+			"name": "Flesh Golem",
+			"image": "/api/images/monsters/flesh-golem.png"
+		},
+		{
+			"id": "ghast",
+			"name": "Ghast",
+			"image": "/api/images/monsters/ghast.png"
+		},
+		{
+			"id": "ghost",
+			"name": "Ghost",
+			"image": "/api/images/monsters/ghost.png"
+		},
+		{
+			"id": "ghoul",
+			"name": "Ghoul",
+			"image": "/api/images/monsters/ghoul.png"
+		},
+		{
+			"id": "giant-ape",
+			"name": "Giant Ape",
+			"image": "/api/images/monsters/giant-ape.png"
+		},
+		{
+			"id": "giant-badger",
+			"name": "Giant Badger",
+			"image": "/api/images/monsters/giant-badger.png"
+		},
+		{
+			"id": "giant-bat",
+			"name": "Giant Bat",
+			"image": "/api/images/monsters/giant-bat.png"
+		},
+		{
+			"id": "killer-whale",
+			"name": "Killer Whale",
+			"image": "/api/images/monsters/killer-whale.png"
+		},
+		{
+			"id": "knight",
+			"name": "Knight",
+			"image": "/api/images/monsters/knight.png"
+		},
+		{
+			"id": "kobold",
+			"name": "Kobold",
+			"image": "/api/images/monsters/kobold.png"
+		},
+		{
+			"id": "kraken",
+			"name": "Kraken",
+			"image": "/api/images/monsters/kraken.png"
+		},
+		{
+			"id": "lamia",
+			"name": "Lamia",
+			"image": "/api/images/monsters/lamia.png"
+		},
+		{
+			"id": "lemure",
+			"name": "Lemure",
+			"image": "/api/images/monsters/lemure.png"
+		},
+		{
+			"id": "red-dragon-wyrmling",
+			"name": "Red Dragon Wyrmling",
+			"image": "/api/images/monsters/red-dragon-wyrmling.png"
+		},
+		{
+			"id": "reef-shark",
+			"name": "Reef Shark",
+			"image": "/api/images/monsters/reef-shark.png"
+		},
+		{
+			"id": "remorhaz",
+			"name": "Remorhaz",
+			"image": "/api/images/monsters/remorhaz.png"
+		},
+		{
+			"id": "rhinoceros",
+			"name": "Rhinoceros",
+			"image": "/api/images/monsters/rhinoceros.png"
+		},
+		{
+			"id": "riding-horse",
+			"name": "Riding Horse",
+			"image": "/api/images/monsters/riding-horse.png"
+		},
+		{
+			"id": "roc",
+			"name": "Roc",
+			"image": "/api/images/monsters/roc.png"
+		},
+		{
+			"id": "wererat-hybrid",
+			"name": "Wererat, Hybrid Form",
+			"image": "/api/images/monsters/wererat-hybrid.png"
+		},
+		{
+			"id": "wererat-rat",
+			"name": "Wererat, Rat Form",
+			"image": "/api/images/monsters/wererat-rat.png"
+		},
+		{
+			"id": "weretiger-human",
+			"name": "Weretiger, Human Form",
+			"image": "/api/images/monsters/weretiger-human.png"
+		},
+		{
+			"id": "weretiger-hybrid",
+			"name": "Weretiger, Hybrid Form",
+			"image": "/api/images/monsters/weretiger-hybrid.png"
+		},
+		{
+			"id": "weretiger-tiger",
+			"name": "Weretiger, Tiger Form",
+			"image": "/api/images/monsters/weretiger-tiger.png"
+		},
+		{
+			"id": "werewolf-human",
+			"name": "Werewolf, Human Form",
+			"image": "/api/images/monsters/werewolf-human.png"
+		},
+		{
+			"id": "zombie",
+			"name": "Zombie",
+			"image": "/api/images/monsters/zombie.png"
+		}
+	]
+}
