@@ -27,7 +27,7 @@ function MonsterList() {
 		onSuccess: () =>
 			void queryClient.invalidateQueries({ queryKey: ["monsters"] }),
 	});
-	const monsters: MonsterBaseI[] = monstersQuery.data?.results ?? [];
+	const monsters: MonsterBaseI[] = monstersQuery.data ?? [];
 
 	const getColumnSearchProps = useSearchFilter<MonsterBaseI>();
 

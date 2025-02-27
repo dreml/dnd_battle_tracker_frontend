@@ -13,8 +13,3 @@ export interface MonsterI extends MonsterBaseI {
 }
 
 export type MonsterNewT = Omit<MonsterI, "id">;
-
-export interface MonstersApiResponseI {
-	count: number;
-	results: MonsterBaseI[];
-}

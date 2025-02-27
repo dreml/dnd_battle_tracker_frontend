@@ -1,7 +1,7 @@
 import { SERVER, URL_MONSTERS } from "../../../shared/config/api.ts";
-import { MonsterI, MonsterNewT, MonstersApiResponseI } from "../model";
+import { MonsterI, MonsterNewT, MonsterBaseI } from "../model";
 
-async function getMonsters(): Promise<MonstersApiResponseI> {
+async function getMonsters(): Promise<MonsterBaseI[]> {
 	let response = await fetch(`${SERVER}${URL_MONSTERS}`, {
 		headers: {
 			"Content-Type": "application/json",
