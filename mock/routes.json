@@ -1,5 +1,7 @@
 {
 	"/": "/",
-	"/api/monsters": "/monstersList",
-	"/api/monsters/:id": "/monsters/:id"
+	"/api/monsters": "/monsters",
+	"/api/monsters/:id": "/monsters/:id",
+	"/api/characters": "/characters",
+	"/api/characters/:id": "/characters/:id"
 }
