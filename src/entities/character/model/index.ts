@@ -1,8 +1,8 @@
 export interface CharacterI {
 	id: string;
 	armor: number;
-	avatar: string;
-	campaignId: string;
+	avatar?: string;
+	campaignId?: string;
 	dateCreated: number;
 	dateUpdated: number;
 	health: number;
