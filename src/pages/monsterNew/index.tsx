@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import { ROUTE_MONSTER_LIST } from "../../shared/router";
 
 function MonsterNew() {
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const monsterNewMutation = useMutation({
 		mutationFn: (newMonster: MonsterNewT) => addNewMonster(newMonster),
@@ -18,7 +18,11 @@ function MonsterNew() {
 		monsterNewMutation.mutate(data);
 	};
 	return (
-		<PageWrapper header="Новый монстр">
+		<PageWrapper
+			header="Новый монстр"
+			isError={monsterNewMutation.isError}
+			errorMessage={monsterNewMutation.error?.message}
+		>
 			<MonsterForm
 				onSubmit={onSubmit}
 				isDisabled={monsterNewMutation.isPending}
