@@ -3,3 +3,4 @@ export const SERVER = "http://localhost:3003";
 export const SERVER_IMG = "https://www.dnd5eapi.co";
 export const URL_MONSTERS = "/api/monsters";
 export const URL_CHARACTERS = "/api/characters";
+export const URL_CAMPAIGNS = "/api/campaigns";

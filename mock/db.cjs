@@ -8,6 +8,7 @@ const data = {
 	characters: JSON.parse(
 		fs.readFileSync(dir + "/data/characters.json", "utf8"),
 	),
+	campaigns: JSON.parse(fs.readFileSync(dir + "/data/campaigns.json", "utf8")),
 };
 
 module.exports = () => data;

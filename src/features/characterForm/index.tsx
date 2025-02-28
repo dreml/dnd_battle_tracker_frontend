@@ -1,37 +1,45 @@
-import { Button, Flex, Form, Input, InputNumber, Spin, Upload } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { SERVER } from "../../shared/config/api.ts";
-import { MonsterI, MonsterNewT } from "../../entities/monster/model";
+import { Button, Flex, Form, Input, InputNumber, Select, Spin } from "antd";
+import { CharacterI, CharacterNewT } from "../../entities/character/model";
 import { useEffect } from "react";
+import { CampaignI } from "../../entities/campaign/model";
 
-type FormValuesT = MonsterNewT | MonsterI;
+type FormValuesT = CharacterI | CharacterNewT;
 
-interface MonsterFormI {
+interface CharacterFormI {
 	onSubmit?: (data: FormValuesT) => void;
-	initialValues?: MonsterI;
+	initialValues?: CharacterI;
 	isDisabled?: boolean;
 	isPending?: boolean;
+	campaigns: CampaignI[];
 }
 
-function MonsterForm(props: MonsterFormI) {
+function CharacterForm(props: CharacterFormI) {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: FormValuesT) => {
 		props.onSubmit?.(values);
 	};
 	useEffect(() => form.resetFields(), [props.initialValues]);
+
 	return (
 		<Form
 			form={form}
-			onFinish={onFinish}
 			initialValues={props.initialValues || {}}
 			layout={"horizontal"}
 			style={{ maxWidth: 600 }}
 			disabled={props?.isDisabled || false}
+			onFinish={onFinish}
 		>
 			<Form.Item
 				name="name"
 				label="Имя"
+				rules={[{ required: true, max: 50, type: "string" }]}
+			>
+				<Input />
+			</Form.Item>
+			<Form.Item
+				name="playerName"
+				label="Имя игрока"
 				rules={[{ required: true, max: 50, type: "string" }]}
 			>
 				<Input />
@@ -64,18 +72,13 @@ function MonsterForm(props: MonsterFormI) {
 					</Form.Item>
 				</div>
 			</Flex>
-
-			<Form.Item name="image" label="Изображение" valuePropName="image">
-				<Upload
-					listType="picture-card"
-					maxCount={1}
-					action={`${SERVER}/upload`}
-				>
-					<button style={{ border: 0, background: "none" }} type="button">
-						<PlusOutlined />
-						<div style={{ marginTop: 8 }}>Загрузить</div>
-					</button>
-				</Upload>
+			<Form.Item name="campaignId" label="Кампания">
+				<Select
+					options={props.campaigns.map(({ id, name }) => ({
+						value: id,
+						label: name,
+					}))}
+				/>
 			</Form.Item>
 			<Form.Item>
 				<Flex gap={"small"} align={"center"}>
@@ -89,4 +92,4 @@ function MonsterForm(props: MonsterFormI) {
 	);
 }
 
-export default MonsterForm;
+export default CharacterForm;

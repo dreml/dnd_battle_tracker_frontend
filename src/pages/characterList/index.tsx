@@ -118,7 +118,13 @@ function CharacterList() {
 		},
 	];
 	return (
-		<PageWrapper header="Персонажи">
+		<PageWrapper
+			header="Персонажи"
+			isError={charactersQuery.isError || deleteCharacterMutation.isError}
+			errorMessage={
+				charactersQuery.error?.message || deleteCharacterMutation.error?.message
+			}
+		>
 			<Flex gap="middle" vertical>
 				<NavLink
 					to={`${ROUTE_CHARACTER_LIST}/new`}

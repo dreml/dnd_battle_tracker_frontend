@@ -3,5 +3,7 @@
 	"/api/monsters": "/monsters",
 	"/api/monsters/:id": "/monsters/:id",
 	"/api/characters": "/characters",
-	"/api/characters/:id": "/characters/:id"
+	"/api/characters/:id": "/characters/:id",
+	"/api/campaigns": "/campaigns",
+	"/api/campaigns/:id": "/campaigns/:id"
 }
