@@ -21,6 +21,7 @@ import { ConfigProvider } from "antd";
 import MonsterEdit from "../pages/monsterEdit";
 import CharacterList from "../pages/characterList";
 import CharacterNew from "../pages/characterNew";
+import CharacterEdit from "../pages/characterEdit";
 
 const queryClient = new QueryClient();
 
@@ -41,7 +42,8 @@ function App() {
 								</Route>
 								<Route path={CHARACTERS}>
 									<Route index element={<CharacterList />} />
-									<Route path={ID} element={<CharacterNew />} />
+									<Route path={NEW} element={<CharacterNew />} />
+									<Route path={ID} element={<CharacterEdit />} />
 								</Route>
 							</Route>
 						</Routes>
