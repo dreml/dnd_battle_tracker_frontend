@@ -1,7 +1,7 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
 import MonsterForm from "../../features/monsterForm";
 import { RouteProps, useParams } from "react-router";
-import { MonsterI, MonsterNewT } from "../../entities/monster/model";
+import { MonsterNewT } from "../../entities/monster/model";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMonster, updateMonster } from "../../entities/monster/api";
 
@@ -23,8 +23,7 @@ function MonsterEdit() {
 		},
 	});
 
-	//TODO: разобраться, как описывать тип
-	const monster: MonsterI = monsterQuery?.data;
+	const monster = monsterQuery?.data;
 
 	const onSubmit = (data: MonsterNewT) => editMutation.mutate(data);
 
