@@ -8,26 +8,31 @@ type FormValuesT = MonsterNewT | MonsterI;
 
 interface MonsterFormI {
 	onSubmit?: (data: FormValuesT) => void;
-	initialValues?: MonsterI;
+	initialValues?: MonsterI | {};
 	isDisabled?: boolean;
 	isPending?: boolean;
 }
 
-function MonsterForm(props: MonsterFormI) {
+function MonsterForm({
+	onSubmit,
+	initialValues = {},
+	isDisabled = false,
+	isPending = false,
+}: MonsterFormI) {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: FormValuesT) => {
-		props.onSubmit?.(values);
+		onSubmit?.(values);
 	};
-	useEffect(() => form.resetFields(), [props.initialValues]);
+	useEffect(() => form.resetFields(), [initialValues]);
 	return (
 		<Form
 			form={form}
 			onFinish={onFinish}
-			initialValues={props.initialValues || {}}
+			initialValues={initialValues || {}}
 			layout={"horizontal"}
 			style={{ maxWidth: 600 }}
-			disabled={props?.isDisabled || false}
+			disabled={isDisabled || isPending}
 		>
 			<Form.Item
 				name="name"
@@ -39,7 +44,7 @@ function MonsterForm(props: MonsterFormI) {
 			<Flex justify={"space-between"}>
 				<div
 					style={{
-						width: "50%",
+						flex: 1,
 					}}
 				>
 					<Form.Item
@@ -52,7 +57,7 @@ function MonsterForm(props: MonsterFormI) {
 				</div>
 				<div
 					style={{
-						width: "50%",
+						flex: 1,
 					}}
 				>
 					<Form.Item
@@ -82,7 +87,7 @@ function MonsterForm(props: MonsterFormI) {
 					<Button type="primary" htmlType="submit">
 						Сохранить
 					</Button>
-					{(props?.isPending || false) && <Spin />}
+					{isPending && <Spin />}
 				</Flex>
 			</Form.Item>
 		</Form>
