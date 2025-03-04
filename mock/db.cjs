@@ -6,7 +6,7 @@ const data = {
 		fs.readFileSync(dir + "/data/monstersFull.json", "utf8"),
 	),
 	monstersList: JSON.parse(
-		fs.readFileSync(dir + "/data/monstersList.json", "utf8"),
+		fs.readFileSync(dir + "/data/monstersFull.json", "utf8"),
 	),
 };
 
