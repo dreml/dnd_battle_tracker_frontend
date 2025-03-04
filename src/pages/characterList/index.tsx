@@ -1,6 +1,5 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteCharacter, getCharacters } from "../../entities/character/api";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CharacterI } from "../../entities/character/model";
 import { ColumnsType } from "antd/lib/table";
 import { SERVER_IMG } from "../../shared/config/api.ts";
@@ -17,19 +16,22 @@ import {
 } from "@ant-design/icons";
 import useSearchFilter from "../../shared/hook/useSearchFilter";
 import { sortByAlphabet, sortByNumber } from "../../shared/lib";
+import {
+	CharacterQueryKey,
+	charactersQueryOptions,
+} from "../../entities/character/queries";
+import { characterDeleteMutation } from "../../entities/character/mutations";
 
 function CharacterList() {
 	const queryClient = useQueryClient();
 
-	const charactersQuery = useQuery({
-		queryKey: ["characters"],
-		queryFn: getCharacters,
-	});
-	const deleteCharacterMutation = useMutation({
-		mutationFn: (id: string) => deleteCharacter(id),
-		onSuccess: () =>
-			void queryClient.invalidateQueries({ queryKey: ["characters"] }),
-	});
+	const charactersQuery = useQuery(charactersQueryOptions());
+	const deleteMutation = characterDeleteMutation(
+		() =>
+			void queryClient.invalidateQueries({
+				queryKey: [CharacterQueryKey.characters],
+			}),
+	);
 	const characters: CharacterI[] = charactersQuery.data ?? [];
 
 	const getColumnSearchProps = useSearchFilter<CharacterI>();
@@ -111,7 +113,7 @@ function CharacterList() {
 					</NavLink>
 					<Button
 						icon={<DeleteOutlined />}
-						onClick={() => deleteCharacterMutation.mutate(item.id)}
+						onClick={() => deleteMutation.mutate(item.id)}
 					/>
 				</Flex>
 			),
@@ -120,9 +122,9 @@ function CharacterList() {
 	return (
 		<PageWrapper
 			header="Персонажи"
-			isError={charactersQuery.isError || deleteCharacterMutation.isError}
+			isError={charactersQuery.isError || deleteMutation.isError}
 			errorMessage={
-				charactersQuery.error?.message || deleteCharacterMutation.error?.message
+				charactersQuery.error?.message || deleteMutation.error?.message
 			}
 		>
 			<Flex gap="middle" vertical>

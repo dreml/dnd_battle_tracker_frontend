@@ -1,29 +1,30 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-// import { getCampaigns } from "../../entities/campaign/api";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CampaignI } from "../../entities/campaign/model";
 import CharacterForm from "../../features/characterForm";
 import { RouteProps, useParams } from "react-router";
-import { getCharacter, updateCharacter } from "../../entities/character/api";
 import { CharacterNewT } from "../../entities/character/model";
 import { campaignsQueryOptions } from "../../entities/campaign/queries";
+import {
+	CharacterQueryKey,
+	characterQueryOptions,
+} from "../../entities/character/queries";
+import { characterUpdateMutation } from "../../entities/character/mutations";
 
 function characterEdit() {
 	const params: RouteProps = useParams();
-	const characterId = params.id || "";
+	const characterId = params.id ?? "";
 
 	const queryClient = useQueryClient();
-	const campaignsQuery = useQuery(campaignsQueryOptions);
-	const characterQuery = useQuery({
-		queryKey: ["character"],
-		queryFn: () => getCharacter(characterId),
-	});
-	const editMutation = useMutation({
-		mutationFn: (data: CharacterNewT) => updateCharacter(characterId, data),
-		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: ["character"] });
-			void queryClient.invalidateQueries({ queryKey: ["characters"] });
-		},
+	const campaignsQuery = useQuery(campaignsQueryOptions());
+	const characterQuery = useQuery(characterQueryOptions(characterId));
+	const editMutation = characterUpdateMutation(characterId, () => {
+		void queryClient.invalidateQueries({
+			queryKey: [CharacterQueryKey.character],
+		});
+		void queryClient.invalidateQueries({
+			queryKey: [CharacterQueryKey.characters],
+		});
 	});
 	const campaigns: CampaignI[] = campaignsQuery.data ?? [];
 	const character = characterQuery?.data;

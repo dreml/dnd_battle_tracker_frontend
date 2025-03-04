@@ -1,8 +1,13 @@
 import { getCampaigns } from "../api";
 
-const campaignsQueryOptions = {
-	queryKey: ["campaigns"],
+enum CampaignQueryKey {
+	campaigns = "campaigns",
+	campaign = "campaign",
+}
+
+const campaignsQueryOptions = () => ({
+	queryKey: [CampaignQueryKey.campaigns],
 	queryFn: getCampaigns,
-};
+});
 
 export { campaignsQueryOptions };
