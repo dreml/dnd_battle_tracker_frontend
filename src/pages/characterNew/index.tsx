@@ -1,6 +1,6 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
 import CharacterForm from "../../features/characterForm";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCampaigns } from "../../entities/campaign/api";
 import { CampaignI } from "../../entities/campaign/model";
 import { useNavigate } from "react-router";
@@ -10,6 +10,7 @@ import { ROUTE_CHARACTER_LIST } from "../../shared/router";
 
 function CharacterNew() {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	const campaignsQuery = useQuery({
 		queryKey: ["campaigns"],
@@ -18,7 +19,10 @@ function CharacterNew() {
 
 	const characterNewMutation = useMutation({
 		mutationFn: (newCharacter: CharacterNewT) => addNewCharacter(newCharacter),
-		onSuccess: () => navigate(ROUTE_CHARACTER_LIST),
+		onSuccess: () => {
+			void queryClient.invalidateQueries({ queryKey: ["characters"] });
+			navigate(ROUTE_CHARACTER_LIST);
+		},
 	});
 	const onSubmit = (data: CharacterNewT) => {
 		characterNewMutation.mutate(data);

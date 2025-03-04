@@ -7,27 +7,33 @@ type FormValuesT = CharacterI | CharacterNewT;
 
 interface CharacterFormI {
 	onSubmit?: (data: FormValuesT) => void;
-	initialValues?: CharacterI;
+	initialValues?: CharacterI | {};
 	isDisabled?: boolean;
 	isPending?: boolean;
 	campaigns: CampaignI[];
 }
 
-function CharacterForm(props: CharacterFormI) {
+function CharacterForm({
+	onSubmit,
+	initialValues = {},
+	isDisabled = false,
+	isPending = false,
+	campaigns,
+}: CharacterFormI) {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: FormValuesT) => {
-		props.onSubmit?.(values);
+		onSubmit?.(values);
 	};
-	useEffect(() => form.resetFields(), [props.initialValues]);
+	useEffect(() => form.resetFields(), [initialValues]);
 
 	return (
 		<Form
 			form={form}
-			initialValues={props.initialValues || {}}
+			initialValues={initialValues}
 			layout={"horizontal"}
 			style={{ maxWidth: 600 }}
-			disabled={props?.isDisabled || false}
+			disabled={isDisabled || isPending}
 			onFinish={onFinish}
 		>
 			<Form.Item
@@ -47,7 +53,7 @@ function CharacterForm(props: CharacterFormI) {
 			<Flex justify={"space-between"}>
 				<div
 					style={{
-						width: "50%",
+						flex: 1,
 					}}
 				>
 					<Form.Item
@@ -60,7 +66,7 @@ function CharacterForm(props: CharacterFormI) {
 				</div>
 				<div
 					style={{
-						width: "50%",
+						flex: 1,
 					}}
 				>
 					<Form.Item
@@ -74,7 +80,7 @@ function CharacterForm(props: CharacterFormI) {
 			</Flex>
 			<Form.Item name="campaignId" label="Кампания">
 				<Select
-					options={props.campaigns.map(({ id, name }) => ({
+					options={campaigns.map(({ id, name }) => ({
 						value: id,
 						label: name,
 					}))}
@@ -85,7 +91,7 @@ function CharacterForm(props: CharacterFormI) {
 					<Button type="primary" htmlType="submit">
 						Сохранить
 					</Button>
-					{(props?.isPending || false) && <Spin />}
+					{isPending && <Spin />}
 				</Flex>
 			</Form.Item>
 		</Form>
