@@ -2,47 +2,40 @@ import PageWrapper from "../../shared/ui/pageWrapper";
 import MonsterForm from "../../features/monsterForm";
 import { RouteProps, useParams } from "react-router";
 import { MonsterNewT } from "../../entities/monster/model";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getMonster, updateMonster } from "../../entities/monster/api";
+import { useQuery } from "@tanstack/react-query";
+import { monsterQueryOptions } from "../../entities/monster/queries";
+import { useMonsterUpdateMutation } from "../../entities/monster/mutations";
 
 function MonsterEdit() {
 	let params: RouteProps = useParams();
-	const queryClient = useQueryClient();
 	const monsterId = params.id || "";
 
-	const monsterQuery = useQuery({
-		queryKey: ["monster"],
-		queryFn: () => getMonster(monsterId),
-	});
+	const monsterQuery = useQuery(monsterQueryOptions(monsterId));
 
-	const editMutation = useMutation({
-		mutationFn: (data: MonsterNewT) => updateMonster(monsterId, data),
-		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: ["monsters"] });
-			void queryClient.invalidateQueries({ queryKey: ["monster"] });
-		},
-	});
+	const monsterEditMutation = useMonsterUpdateMutation(monsterId);
 
 	const monster = monsterQuery?.data;
 
-	const onSubmit = (data: MonsterNewT) => editMutation.mutate(data);
+	const onSubmit = (data: MonsterNewT) => monsterEditMutation.mutate(data);
 
 	return (
 		<PageWrapper
 			header={monster?.name || "Загружаем..."}
-			isError={monsterQuery.isError || editMutation.isError}
-			errorMessage={monsterQuery.error?.message || editMutation.error?.message}
+			isError={monsterQuery.isError || monsterEditMutation.isError}
+			errorMessage={
+				monsterQuery.error?.message || monsterEditMutation.error?.message
+			}
 		>
 			<MonsterForm
 				initialValues={monster ?? {}}
 				onSubmit={onSubmit}
 				isDisabled={
-					editMutation.isPending ||
+					monsterEditMutation.isPending ||
 					monsterQuery.isPending ||
-					editMutation.isError ||
+					monsterEditMutation.isError ||
 					monsterQuery.isError
 				}
-				isPending={editMutation.isPending || monsterQuery.isPending}
+				isPending={monsterEditMutation.isPending || monsterQuery.isPending}
 			/>
 		</PageWrapper>
 	);

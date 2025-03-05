@@ -1,18 +1,49 @@
 import { CharacterNewT } from "../model";
-import { deleteCharacter, updateCharacter } from "../api";
-import { useMutation } from "@tanstack/react-query";
+import { addNewCharacter, deleteCharacter, updateCharacter } from "../api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CharacterQueryKey } from "../queries";
 
-const characterUpdateMutation = (id: string, onSuccess: () => void) => {
+const useCharacterUpdateMutation = (id: string) => {
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: (data: CharacterNewT) => updateCharacter(id, data),
-		onSuccess: onSuccess,
+		onSuccess: () => {
+			void queryClient.invalidateQueries({
+				queryKey: [CharacterQueryKey.characters],
+			});
+		},
 	});
 };
 
-const characterDeleteMutation = (onSuccess: () => void) =>
-	useMutation({
+const useCharacterDeleteMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
 		mutationFn: (id: string) => deleteCharacter(id),
-		onSuccess: onSuccess,
+		onSuccess: () => {
+			void queryClient.invalidateQueries({
+				queryKey: [CharacterQueryKey.character],
+			});
+			void queryClient.invalidateQueries({
+				queryKey: [CharacterQueryKey.characters],
+			});
+		},
 	});
+};
 
-export { characterUpdateMutation, characterDeleteMutation };
+const useCharacterCreateMutation = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (newCharacter: CharacterNewT) => addNewCharacter(newCharacter),
+		onSuccess: () => {
+			void queryClient.invalidateQueries({
+				queryKey: [CharacterQueryKey.characters],
+			});
+		},
+	});
+};
+
+export {
+	useCharacterUpdateMutation,
+	useCharacterDeleteMutation,
+	useCharacterCreateMutation,
+};
