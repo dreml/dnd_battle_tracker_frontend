@@ -12,4 +12,11 @@ export interface MonsterI extends MonsterBaseI {
 	dateUpdated: number;
 }
 
+export interface MonsterForBattleI {
+	id: string;
+	initiative: number;
+	health: number;
+	armor: number;
+}
+
 export type MonsterNewT = Omit<MonsterI, "id">;

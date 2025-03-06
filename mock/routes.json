@@ -5,5 +5,7 @@
 	"/api/characters": "/characters",
 	"/api/characters/:id": "/characters/:id",
 	"/api/campaigns": "/campaigns",
-	"/api/campaigns/:id": "/campaigns/:id"
+	"/api/campaigns/:id": "/campaigns/:id",
+	"/api/battle-templates": "/battleTemplates",
+	"/api/battle-templates/:id": "/battleTemplates/:id"
 }
