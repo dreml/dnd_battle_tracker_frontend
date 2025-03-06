@@ -1,7 +1,6 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
 import { MonsterBaseI } from "../../entities/monster/model";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteMonster, getMonsters } from "../../entities/monster/api";
+import { useQuery } from "@tanstack/react-query";
 import { Table, Button, Flex, Spin } from "antd";
 import { SERVER_IMG } from "../../shared/config/api.ts";
 import { NavLink } from "react-router";
@@ -14,19 +13,12 @@ import {
 import { sortByAlphabet } from "../../shared/lib";
 import useSearchFilter from "../../shared/hook/useSearchFilter";
 import { ColumnsType } from "antd/lib/table";
+import { monstersQueryOptions } from "../../entities/monster/queries";
+import { useMonsterDeleteMutation } from "../../entities/monster/mutations";
 
 function MonsterList() {
-	const queryClient = useQueryClient();
-
-	const monstersQuery = useQuery({
-		queryKey: ["monsters"],
-		queryFn: getMonsters,
-	});
-	const deleteMutation = useMutation({
-		mutationFn: (id: string) => deleteMonster(id),
-		onSuccess: () =>
-			void queryClient.invalidateQueries({ queryKey: ["monsters"] }),
-	});
+	const monstersQuery = useQuery(monstersQueryOptions());
+	const monsterDeleteMutation = useMonsterDeleteMutation();
 	const monsters: MonsterBaseI[] = monstersQuery.data ?? [];
 
 	const getColumnSearchProps = useSearchFilter<MonsterBaseI>();
@@ -74,7 +66,7 @@ function MonsterList() {
 					</NavLink>
 					<Button
 						icon={<DeleteOutlined />}
-						onClick={() => deleteMutation.mutate(item.id)}
+						onClick={() => monsterDeleteMutation.mutate(item.id)}
 					/>
 				</Flex>
 			),
@@ -84,9 +76,9 @@ function MonsterList() {
 	return (
 		<PageWrapper
 			header="Монстры"
-			isError={monstersQuery.isError || deleteMutation.isError}
+			isError={monstersQuery.isError || monsterDeleteMutation.isError}
 			errorMessage={
-				monstersQuery.error?.message || deleteMutation.error?.message
+				monstersQuery.error?.message || monsterDeleteMutation.error?.message
 			}
 		>
 			<Flex gap="middle" vertical>
