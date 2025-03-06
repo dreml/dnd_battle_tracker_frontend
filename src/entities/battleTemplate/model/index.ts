@@ -6,3 +6,5 @@ export interface BattleTemplateI {
 	name: string;
 	monsters: MonsterForBattleI[];
 }
+
+export type BattleTemplateNewT = Omit<BattleTemplateI, "id">;
