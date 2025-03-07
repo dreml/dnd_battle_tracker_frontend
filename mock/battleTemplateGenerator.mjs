@@ -5,6 +5,9 @@ const __dirname = import.meta.dirname;
 const monsterList = JSON.parse(
 	fs.readFileSync(__dirname + "/data/monstersFull.json", "utf8"),
 );
+const campaigns = JSON.parse(
+	fs.readFileSync(__dirname + "/data/campaigns.json", "utf8"),
+);
 
 let battleCount = 5;
 let battleTemplates = [];
@@ -25,6 +28,7 @@ for (let i = 0; i < battleCount; i++) {
 	battleTemplates.push({
 		id: uniqueId(),
 		name: `Шаблон №${i + 1}`,
+		campaignId: campaigns[getRandomInt(campaigns.length - 1)].id,
 		monsters,
 	});
 }

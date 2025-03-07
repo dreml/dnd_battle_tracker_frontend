@@ -9,6 +9,7 @@ import Locale from "antd/locale/ru_RU";
 import "./app.css";
 
 import {
+	BATTLE_TEMPLATES,
 	CAMPAIGNS,
 	CHARACTERS,
 	ID,
@@ -22,6 +23,7 @@ import MonsterEdit from "../pages/monsterEdit";
 import CharacterList from "../pages/characterList";
 import CharacterNew from "../pages/characterNew";
 import CharacterEdit from "../pages/characterEdit";
+import BattleTemplateList from "../pages/battleTemplateList";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +47,10 @@ function App() {
 									<Route path={NEW} element={<CharacterNew />} />
 									<Route path={ID} element={<CharacterEdit />} />
 								</Route>
+								<Route
+									path={BATTLE_TEMPLATES}
+									element={<BattleTemplateList />}
+								/>
 							</Route>
 						</Routes>
 					</ConfigProvider>
