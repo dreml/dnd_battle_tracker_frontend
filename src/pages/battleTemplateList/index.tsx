@@ -29,7 +29,6 @@ function BattleTemplateList() {
 	const campaigns: CampaignI[] = campaignsQuery.data ?? [];
 	const battleTemplatesQuery = useQuery({
 		...battleTemplatesQueryOptions(),
-		enabled: !!campaigns,
 		select: (battleTemplates) =>
 			battleTemplates.map((item) => ({
 				...item,
@@ -82,9 +81,14 @@ function BattleTemplateList() {
 	];
 
 	const isPending = battleTemplatesQuery.isPending || campaignsQuery.isPending;
-	const isError = battleTemplatesQuery.isError || campaignsQuery.isError;
+	const isError =
+		battleTemplatesQuery.isError ||
+		campaignsQuery.isError ||
+		battleTemplateDeleteMutation.isError;
 	const errorMessage =
-		battleTemplatesQuery.error?.message || campaignsQuery.error?.message;
+		battleTemplatesQuery.error?.message ||
+		campaignsQuery.error?.message ||
+		battleTemplateDeleteMutation.error?.message;
 	return (
 		<PageWrapper header="Шаблоны" isError={isError} errorMessage={errorMessage}>
 			<Flex gap="middle" vertical>
