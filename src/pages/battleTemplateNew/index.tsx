@@ -5,7 +5,7 @@ import { campaignsQueryOptions } from "../../entities/campaign/queries";
 import { CampaignI } from "../../entities/campaign/model";
 import { useBattleTemplateCreateMutation } from "../../entities/battleTemplate/mutations";
 import { BattleTemplateNewT } from "../../entities/battleTemplate/model";
-import { ROUTE_CHARACTER_LIST } from "../../shared/router";
+import { ROUTE_BATTLE_TEMPLATE_LIST } from "../../shared/router";
 import { useNavigate } from "react-router";
 import { monstersQueryOptions } from "../../entities/monster/queries";
 import { MonsterI } from "../../entities/monster/model";
@@ -22,7 +22,7 @@ function BattleTemplateNew() {
 
 	const onSubmit = (data: BattleTemplateNewT) => {
 		battleTemplateCreateMutation.mutateAsync(data).then(() => {
-			navigate(ROUTE_CHARACTER_LIST);
+			navigate(ROUTE_BATTLE_TEMPLATE_LIST);
 		});
 	};
 

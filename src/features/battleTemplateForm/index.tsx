@@ -1,4 +1,13 @@
-import { Button, Flex, Form, Input, InputNumber, Select, Table } from "antd";
+import {
+	Button,
+	Flex,
+	Form,
+	Input,
+	InputNumber,
+	Select,
+	Spin,
+	Table,
+} from "antd";
 import { useEffect, useState } from "react";
 import { CampaignI } from "../../entities/campaign/model";
 import {
@@ -8,6 +17,7 @@ import {
 import { MonsterForBattleI, MonsterI } from "../../entities/monster/model";
 import { ColumnsType } from "antd/lib/table";
 import { DeleteOutlined } from "@ant-design/icons";
+import { uniqueId } from "../../shared/lib";
 
 type FormValuesT = BattleTemplateI | BattleTemplateNewT;
 
@@ -20,6 +30,10 @@ interface BattleTemplateFormPropsI {
 	monsters: MonsterI[];
 }
 
+interface MonstersFormI extends MonsterForBattleI {
+	key: string;
+}
+
 function BattleTemplateForm({
 	onSubmit,
 	initialValues,
@@ -29,35 +43,64 @@ function BattleTemplateForm({
 	monsters = [],
 }: BattleTemplateFormPropsI) {
 	const [form] = Form.useForm();
-	const [battleMonsters, setBattleMonsters] = useState<MonsterForBattleI[]>([]);
+	// TODO: заполнить массив из initialValues
+	const [battleMonsters, setBattleMonsters] = useState<MonstersFormI[]>([]);
 
-	const onFinish = (values: FormValuesT) => {
-		onSubmit?.(values);
+	const onFinish = ({ name, campaignId }: FormValuesT) => {
+		const result = {
+			name,
+			campaignId,
+			monsters: battleMonsters.map(({ id, health, armor, initiative }) => ({
+				id,
+				health,
+				armor,
+				initiative,
+			})),
+		};
+		onSubmit?.(result);
 	};
 
-	const deleteBattleMonster = (id: string) => {
+	const deleteBattleMonster = (key: string) => {
 		setBattleMonsters((prevState) =>
-			prevState.filter((monster) => monster.id !== id),
+			prevState.filter((monster) => monster.key !== key),
 		);
 	};
 	const addBattleMonster = (id: string) => {
-		const newMonsterData: MonsterForBattleI = {
+		const monster = monsters.find((monster) => monster.id === id);
+		const newMonsterData: MonstersFormI = {
+			key: uniqueId(),
 			id,
 			initiative: 0,
-			health: 0,
-			armor: 0,
+			health: monster?.health ?? 0,
+			armor: monster?.armor ?? 0,
 		};
 		setBattleMonsters((prevState) => [...prevState, newMonsterData]);
 	};
+
+	const changeBattleMonster = (
+		field: string,
+		key: string,
+		value: number | string | null,
+	) => {
+		setBattleMonsters((prevState) =>
+			prevState.map((monster) => {
+				if (monster.key !== key) return monster;
+				return {
+					...monster,
+					[field]: value,
+				};
+			}),
+		);
+	};
 	useEffect(() => form.resetFields(), [initialValues]);
 
-	const battleMonstersColumns: ColumnsType<MonsterForBattleI> = [
+	const battleMonstersColumns: ColumnsType<MonstersFormI> = [
 		{
 			title: "Имя",
-			dataIndex: "id",
-			key: "id",
+			dataIndex: "key",
+			key: "key",
 			width: "20%",
-			render: (_: unknown, item: MonsterForBattleI) => (
+			render: (_: unknown, item: MonstersFormI) => (
 				<div>
 					{monsters.find(({ id }: { id: string }) => id === item.id)?.name}
 				</div>
@@ -68,13 +111,18 @@ function BattleTemplateForm({
 			dataIndex: "initiative",
 			key: "initiative",
 			width: "20%",
-			render: (_: unknown, item: MonsterForBattleI) => (
+			render: (_: unknown, item: MonstersFormI) => (
 				<Form.Item
-					name={`initiative-${item.id}`}
+					name={`initiative-${item.key}`}
 					initialValue={item.initiative}
 					rules={[{ required: true, type: "integer", min: 0 }]}
+					noStyle={true}
 				>
-					<InputNumber />
+					<InputNumber
+						onChange={(value) =>
+							changeBattleMonster("initiative", item.key, value)
+						}
+					/>
 				</Form.Item>
 			),
 		},
@@ -83,13 +131,16 @@ function BattleTemplateForm({
 			dataIndex: "health",
 			key: "health",
 			width: "20%",
-			render: (_: unknown, item: MonsterForBattleI) => (
+			render: (_: unknown, item: MonstersFormI) => (
 				<Form.Item
-					name={`health-${item.id}`}
+					name={`health-${item.key}`}
 					initialValue={item.health}
 					rules={[{ required: true, type: "integer", min: 0 }]}
+					noStyle={true}
 				>
-					<InputNumber />
+					<InputNumber
+						onChange={(value) => changeBattleMonster("health", item.key, value)}
+					/>
 				</Form.Item>
 			),
 		},
@@ -98,13 +149,16 @@ function BattleTemplateForm({
 			dataIndex: "armor",
 			key: "armor",
 			width: "20%",
-			render: (_: unknown, item: MonsterForBattleI) => (
+			render: (_: unknown, item: MonstersFormI) => (
 				<Form.Item
-					name={`armor-${item.id}`}
+					name={`armor-${item.key}`}
 					initialValue={item.armor}
 					rules={[{ required: true, type: "integer", min: 0 }]}
+					noStyle={true}
 				>
-					<InputNumber />
+					<InputNumber
+						onChange={(value) => changeBattleMonster("armor", item.key, value)}
+					/>
 				</Form.Item>
 			),
 		},
@@ -113,11 +167,11 @@ function BattleTemplateForm({
 			dataIndex: "description",
 			key: "description",
 			width: "20%",
-			render: (_: unknown, item: MonsterForBattleI) => (
+			render: (_: unknown, item: MonstersFormI) => (
 				<Flex gap="small" wrap>
 					<Button
 						icon={<DeleteOutlined />}
-						onClick={() => deleteBattleMonster(item.id)}
+						onClick={() => deleteBattleMonster(item.key)}
 					/>
 				</Flex>
 			),
@@ -166,9 +220,17 @@ function BattleTemplateForm({
 				<Table
 					dataSource={battleMonsters}
 					columns={battleMonstersColumns}
-					rowKey="id"
+					rowKey="key"
 				/>
 			)}
+			<Form.Item>
+				<Flex gap={"small"} align={"center"}>
+					<Button type="primary" htmlType="submit">
+						Сохранить
+					</Button>
+					{isPending && <Spin />}
+				</Flex>
+			</Form.Item>
 		</Form>
 	);
 }
