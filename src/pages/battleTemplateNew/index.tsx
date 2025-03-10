@@ -8,7 +8,7 @@ import { BattleTemplateNewT } from "../../entities/battleTemplate/model";
 import { ROUTE_CHARACTER_LIST } from "../../shared/router";
 import { useNavigate } from "react-router";
 import { monstersQueryOptions } from "../../entities/monster/queries";
-import { MonsterBaseI } from "../../entities/monster/model";
+import { MonsterI } from "../../entities/monster/model";
 
 function BattleTemplateNew() {
 	const navigate = useNavigate();
@@ -16,7 +16,7 @@ function BattleTemplateNew() {
 	const campaignsQuery = useQuery(campaignsQueryOptions());
 	const campaigns: CampaignI[] = campaignsQuery.data ?? [];
 	const monstersQuery = useQuery(monstersQueryOptions());
-	const monsters: MonsterBaseI[] = monstersQuery.data ?? [];
+	const monsters: MonsterI[] = monstersQuery.data ?? [];
 
 	const battleTemplateCreateMutation = useBattleTemplateCreateMutation();
 

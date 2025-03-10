@@ -5,7 +5,7 @@ import {
 	BattleTemplateI,
 	BattleTemplateNewT,
 } from "../../entities/battleTemplate/model";
-import { MonsterBaseI, MonsterForBattleI } from "../../entities/monster/model";
+import { MonsterForBattleI, MonsterI } from "../../entities/monster/model";
 import { ColumnsType } from "antd/lib/table";
 import { DeleteOutlined } from "@ant-design/icons";
 
@@ -17,7 +17,7 @@ interface BattleTemplateFormPropsI {
 	isDisabled?: boolean;
 	isPending?: boolean;
 	campaigns: CampaignI[];
-	monsters: MonsterBaseI[];
+	monsters: MonsterI[];
 }
 
 function BattleTemplateForm({
