@@ -23,7 +23,7 @@ type FormValuesT = BattleTemplateI | BattleTemplateNewT;
 
 interface BattleTemplateFormPropsI {
 	onSubmit?: (data: FormValuesT) => void;
-	initialValues?: BattleTemplateI | {};
+	initialValues?: BattleTemplateI | { monsters: [] };
 	isDisabled?: boolean;
 	isPending?: boolean;
 	campaigns: CampaignI[];
@@ -36,14 +36,13 @@ interface MonstersFormI extends MonsterForBattleI {
 
 function BattleTemplateForm({
 	onSubmit,
-	initialValues,
+	initialValues = { monsters: [] },
 	isDisabled = false,
 	isPending = false,
 	campaigns = [],
 	monsters = [],
 }: BattleTemplateFormPropsI) {
 	const [form] = Form.useForm();
-	// TODO: заполнить массив из initialValues
 	const [battleMonsters, setBattleMonsters] = useState<MonstersFormI[]>([]);
 
 	const onFinish = ({ name, campaignId }: FormValuesT) => {
@@ -92,7 +91,17 @@ function BattleTemplateForm({
 			}),
 		);
 	};
-	useEffect(() => form.resetFields(), [initialValues]);
+	useEffect(() => {
+		form.resetFields();
+		if (initialValues) {
+			setBattleMonsters(
+				initialValues.monsters.map((monster: MonsterForBattleI) => ({
+					...monster,
+					key: uniqueId(),
+				})),
+			);
+		}
+	}, [initialValues]);
 
 	const battleMonstersColumns: ColumnsType<MonstersFormI> = [
 		{

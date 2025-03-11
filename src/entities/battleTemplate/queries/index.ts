@@ -11,7 +11,7 @@ const battleTemplatesQueryOptions = () => ({
 });
 
 const battleTemplateQueryOptions = (id: string) => ({
-	queryKey: [BattleTemplateQueryKey.battleTemplate],
+	queryKey: [BattleTemplateQueryKey.battleTemplate, id],
 	queryFn: () => getBattleTemplate(id),
 });
 

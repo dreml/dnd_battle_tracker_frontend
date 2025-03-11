@@ -25,6 +25,7 @@ import CharacterNew from "../pages/characterNew";
 import CharacterEdit from "../pages/characterEdit";
 import BattleTemplateList from "../pages/battleTemplateList";
 import BattleTemplateNew from "../pages/battleTemplateNew";
+import BattleTemplateEdit from "../pages/battleTemplateEdit";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ function App() {
 								<Route path={BATTLE_TEMPLATES}>
 									<Route index element={<BattleTemplateList />} />
 									<Route path={NEW} element={<BattleTemplateNew />} />
+									<Route path={ID} element={<BattleTemplateEdit />} />
 								</Route>
 							</Route>
 						</Routes>
