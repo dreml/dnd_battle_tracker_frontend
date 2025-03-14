@@ -1,7 +1,7 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
 import MonsterForm from "../../features/monsterForm";
 import { RouteProps, useParams } from "react-router";
-import { MonsterNewT } from "../../entities/monster/model";
+import { MonsterEditT } from "../../entities/monster/model";
 import { useQuery } from "@tanstack/react-query";
 import { monsterQueryOptions } from "../../entities/monster/queries";
 import { useMonsterUpdateMutation } from "../../entities/monster/mutations";
@@ -16,7 +16,7 @@ function MonsterEdit() {
 
 	const monster = monsterQuery?.data;
 
-	const onSubmit = (data: MonsterNewT) => monsterEditMutation.mutate(data);
+	const onSubmit = (data: MonsterEditT) => monsterEditMutation.mutate(data);
 
 	return (
 		<PageWrapper

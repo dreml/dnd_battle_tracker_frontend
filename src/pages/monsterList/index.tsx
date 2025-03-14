@@ -1,5 +1,5 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
-import { MonsterBaseI } from "../../entities/monster/model";
+import { MonsterI } from "../../entities/monster/model";
 import { useQuery } from "@tanstack/react-query";
 import { Table, Button, Flex, Spin } from "antd";
 import { SERVER_IMG } from "../../shared/config/api.ts";
@@ -19,17 +19,17 @@ import { useMonsterDeleteMutation } from "../../entities/monster/mutations";
 function MonsterList() {
 	const monstersQuery = useQuery(monstersQueryOptions());
 	const monsterDeleteMutation = useMonsterDeleteMutation();
-	const monsters: MonsterBaseI[] = monstersQuery.data ?? [];
+	const monsters: MonsterI[] = monstersQuery.data ?? [];
 
-	const getColumnSearchProps = useSearchFilter<MonsterBaseI>();
+	const getColumnSearchProps = useSearchFilter<MonsterI>();
 
-	const columns: ColumnsType<MonsterBaseI> = [
+	const columns: ColumnsType<MonsterI> = [
 		{
 			title: "Изображение",
 			dataIndex: "image",
 			key: "image",
 			width: "15%",
-			render: (image: string, item: MonsterBaseI) => {
+			render: (image: string, item: MonsterI) => {
 				if (image) {
 					return (
 						<img
@@ -50,8 +50,7 @@ function MonsterList() {
 			key: "name",
 			width: "30%",
 			...getColumnSearchProps("name", "имя"),
-			sorter: (a: MonsterBaseI, b: MonsterBaseI) =>
-				sortByAlphabet(a.name, b.name),
+			sorter: (a: MonsterI, b: MonsterI) => sortByAlphabet(a.name, b.name),
 			sortDirections: ["descend", "ascend"],
 		},
 		{
@@ -59,7 +58,7 @@ function MonsterList() {
 			dataIndex: "description",
 			key: "description",
 			width: "30%",
-			render: (_: unknown, item: MonsterBaseI) => (
+			render: (_: unknown, item: MonsterI) => (
 				<Flex gap="small" wrap>
 					<NavLink to={getRouteMonsterEdit(item.id)}>
 						<Button icon={<EditOutlined />} />

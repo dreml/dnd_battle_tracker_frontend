@@ -21,15 +21,23 @@ function CharacterNew() {
 	};
 
 	const campaigns: CampaignI[] = campaignsQuery.data ?? [];
+	const isError = campaignsQuery.isError || characterCreateMutation.isError;
+
+	const errorMessage =
+		campaignsQuery.error?.message || characterCreateMutation.error?.message;
+	const isPending =
+		campaignsQuery.isPending || characterCreateMutation.isPending;
 	return (
 		<PageWrapper
 			header="Новый персонаж"
-			isError={campaignsQuery.isError || characterCreateMutation.isError}
-			errorMessage={
-				campaignsQuery.error?.message || characterCreateMutation.error?.message
-			}
+			isError={isError}
+			errorMessage={errorMessage}
 		>
-			<CharacterForm campaigns={campaigns} onSubmit={onSubmit} />
+			<CharacterForm
+				campaigns={campaigns}
+				onSubmit={onSubmit}
+				isPending={isPending}
+			/>
 		</PageWrapper>
 	);
 }

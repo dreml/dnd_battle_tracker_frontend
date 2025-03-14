@@ -11,3 +11,4 @@ export interface CharacterI {
 }
 
 export type CharacterNewT = Omit<CharacterI, "id">;
+export type CharacterEditT = Omit<CharacterI, "id">;

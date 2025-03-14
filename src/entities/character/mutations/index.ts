@@ -1,4 +1,4 @@
-import { CharacterNewT } from "../model";
+import { CharacterEditT, CharacterNewT } from "../model";
 import { addNewCharacter, deleteCharacter, updateCharacter } from "../api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CharacterQueryKey } from "../queries";
@@ -6,7 +6,7 @@ import { CharacterQueryKey } from "../queries";
 const useCharacterUpdateMutation = (id: string) => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (data: CharacterNewT) => updateCharacter(id, data),
+		mutationFn: (data: CharacterEditT) => updateCharacter(id, data),
 		onSuccess: () => {
 			void queryClient.invalidateQueries({
 				queryKey: [CharacterQueryKey.characters],

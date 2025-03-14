@@ -12,11 +12,11 @@ import {
 import { NavLink, useLocation } from "react-router";
 import {
 	ROUTE_ACTIVE_CAMPAIGN,
-	ROUTE_BATTLE_LIST,
 	ROUTE_CAMPAIGN_LIST,
 	ROUTE_MONSTER_LIST,
 	ROUTE_CHARACTER_LIST,
 	ROUTE_LIBRARY,
+	ROUTE_BATTLE_TEMPLATE_LIST,
 } from "../../router";
 
 const items: MenuProps["items"] = [
@@ -30,11 +30,7 @@ const items: MenuProps["items"] = [
 		label: <NavLink to={ROUTE_CAMPAIGN_LIST}>Кампании</NavLink>,
 		icon: <BuildOutlined />,
 	},
-	{
-		key: ROUTE_BATTLE_LIST,
-		label: <NavLink to={ROUTE_BATTLE_LIST}>Бои</NavLink>,
-		icon: <ThunderboltOutlined />,
-	},
+
 	{
 		key: ROUTE_LIBRARY,
 		label: "Библиотека",
@@ -49,6 +45,11 @@ const items: MenuProps["items"] = [
 				key: ROUTE_CHARACTER_LIST,
 				label: <NavLink to={ROUTE_CHARACTER_LIST}>Персонажи</NavLink>,
 				icon: <UserOutlined />,
+			},
+			{
+				key: ROUTE_BATTLE_TEMPLATE_LIST,
+				label: <NavLink to={ROUTE_BATTLE_TEMPLATE_LIST}>Шаблоны</NavLink>,
+				icon: <ThunderboltOutlined />,
 			},
 		],
 	},

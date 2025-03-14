@@ -1,10 +1,14 @@
 import { Button, Flex, Form, Input, InputNumber, Spin, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { SERVER } from "../../shared/config/api.ts";
-import { MonsterI, MonsterNewT } from "../../entities/monster/model";
+import {
+	MonsterEditT,
+	MonsterI,
+	MonsterNewT,
+} from "../../entities/monster/model";
 import { useEffect } from "react";
 
-type FormValuesT = MonsterNewT | MonsterI;
+type FormValuesT = MonsterNewT | MonsterEditT;
 
 interface MonsterFormI {
 	onSubmit?: (data: FormValuesT) => void;
