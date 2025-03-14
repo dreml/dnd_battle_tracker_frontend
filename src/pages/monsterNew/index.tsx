@@ -1,32 +1,30 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
 import MonsterForm from "../../features/monsterForm";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MonsterNewT } from "../../entities/monster/model";
-import { addNewMonster } from "../../entities/monster/api";
 import { useNavigate } from "react-router";
 import { ROUTE_MONSTER_LIST } from "../../shared/router";
+import { useMonsterCreateMutation } from "../../entities/monster/mutations";
 
 function MonsterNew() {
-	let navigate = useNavigate();
-	const queryClient = useQueryClient();
+	const navigate = useNavigate();
 
-	const monsterNewMutation = useMutation({
-		mutationFn: (newMonster: MonsterNewT) => addNewMonster(newMonster),
-		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: ["monsters"] });
-			navigate(ROUTE_MONSTER_LIST);
-		},
-	});
+	const monsterCreateMutation = useMonsterCreateMutation();
 
 	const onSubmit = (data: MonsterNewT) => {
-		monsterNewMutation.mutate(data);
+		monsterCreateMutation.mutateAsync(data).then(() => {
+			navigate(ROUTE_MONSTER_LIST);
+		});
 	};
 	return (
-		<PageWrapper header="Новый монстр">
+		<PageWrapper
+			header="Новый монстр"
+			isError={monsterCreateMutation.isError}
+			errorMessage={monsterCreateMutation.error?.message}
+		>
 			<MonsterForm
 				onSubmit={onSubmit}
-				isDisabled={monsterNewMutation.isPending}
-				isPending={monsterNewMutation.isPending}
+				isDisabled={monsterCreateMutation.isPending}
+				isPending={monsterCreateMutation.isPending}
 			/>
 		</PageWrapper>
 	);

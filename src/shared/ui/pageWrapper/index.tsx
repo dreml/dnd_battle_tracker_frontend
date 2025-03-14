@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Layout, notification } from "antd";
 
 import SideMenu from "../sideMenu";
@@ -40,9 +40,11 @@ function PageWrapper({
 		});
 	};
 
-	if (isError) {
-		openNotificationWithIcon(NOTIFICATION_TYPES.SUCCESS, "Error", errorMessage);
-	}
+	useEffect(() => {
+		if (isError) {
+			openNotificationWithIcon(NOTIFICATION_TYPES.ERROR, "Error", errorMessage);
+		}
+	}, [isError, errorMessage]);
 
 	return (
 		<Layout hasSider>

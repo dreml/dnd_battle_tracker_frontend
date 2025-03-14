@@ -8,10 +8,20 @@ import MonsterList from "../pages/monsterList";
 import Locale from "antd/locale/ru_RU";
 import "./app.css";
 
-import { CAMPAIGNS, ID, LIBRARY, MONSTERS, NEW } from "../shared/router";
+import {
+	CAMPAIGNS,
+	CHARACTERS,
+	ID,
+	LIBRARY,
+	MONSTERS,
+	NEW,
+} from "../shared/router";
 import MonsterNew from "../pages/monsterNew";
 import { ConfigProvider } from "antd";
 import MonsterEdit from "../pages/monsterEdit";
+import CharacterList from "../pages/characterList";
+import CharacterNew from "../pages/characterNew";
+import CharacterEdit from "../pages/characterEdit";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +39,11 @@ function App() {
 									<Route index element={<MonsterList />} />
 									<Route path={ID} element={<MonsterEdit />} />
 									<Route path={NEW} element={<MonsterNew />} />
+								</Route>
+								<Route path={CHARACTERS}>
+									<Route index element={<CharacterList />} />
+									<Route path={NEW} element={<CharacterNew />} />
+									<Route path={ID} element={<CharacterEdit />} />
 								</Route>
 							</Route>
 						</Routes>
