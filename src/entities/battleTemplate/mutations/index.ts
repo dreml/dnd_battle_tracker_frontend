@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BattleTemplateNewT } from "../model";
+import { BattleTemplateEditT, BattleTemplateNewT } from "../model";
 import {
 	createBattleTemplate,
 	deleteBattleTemplate,
@@ -23,7 +23,7 @@ const useBattleTemplateCreateMutation = () => {
 const useBattleTemplateUpdateMutation = (id: string) => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (battleTemplate: BattleTemplateNewT) =>
+		mutationFn: (battleTemplate: BattleTemplateEditT) =>
 			updateBattleTemplate(id, battleTemplate),
 		onSuccess: () => {
 			void queryClient.invalidateQueries({

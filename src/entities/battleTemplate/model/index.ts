@@ -8,3 +8,4 @@ export interface BattleTemplateI {
 }
 
 export type BattleTemplateNewT = Omit<BattleTemplateI, "id">;
+export type BattleTemplateEditT = Omit<BattleTemplateI, "id">;

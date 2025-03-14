@@ -17,3 +17,4 @@ export interface MonsterForBattleI {
 }
 
 export type MonsterNewT = Omit<MonsterI, "id">;
+export type MonsterEditT = Omit<MonsterI, "id">;

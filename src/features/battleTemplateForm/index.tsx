@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { CampaignI } from "../../entities/campaign/model";
 import {
+	BattleTemplateEditT,
 	BattleTemplateI,
 	BattleTemplateNewT,
 } from "../../entities/battleTemplate/model";
@@ -19,7 +20,7 @@ import { ColumnsType } from "antd/lib/table";
 import { DeleteOutlined } from "@ant-design/icons";
 import { uniqueId } from "../../shared/lib";
 
-type FormValuesT = BattleTemplateI | BattleTemplateNewT;
+type FormValuesT = BattleTemplateEditT | BattleTemplateNewT;
 
 interface BattleTemplateFormPropsI {
 	onSubmit?: (data: FormValuesT) => void;

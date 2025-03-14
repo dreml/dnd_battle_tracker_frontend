@@ -7,7 +7,7 @@ import { monstersQueryOptions } from "../../entities/monster/queries";
 import { MonsterI } from "../../entities/monster/model";
 import { RouteProps, useParams } from "react-router";
 import { battleTemplateQueryOptions } from "../../entities/battleTemplate/queries";
-import { BattleTemplateNewT } from "../../entities/battleTemplate/model";
+import { BattleTemplateEditT } from "../../entities/battleTemplate/model";
 import { useBattleTemplateUpdateMutation } from "../../entities/battleTemplate/mutations";
 
 function BattleTemplateEdit() {
@@ -25,7 +25,7 @@ function BattleTemplateEdit() {
 	const monstersQuery = useQuery(monstersQueryOptions());
 	const monsters: MonsterI[] = monstersQuery.data ?? [];
 
-	const onSubmit = (data: BattleTemplateNewT) =>
+	const onSubmit = (data: BattleTemplateEditT) =>
 		battleTemplateUpdateMutation.mutate(data);
 	const isError =
 		battleTemplateQuery.isError ||
