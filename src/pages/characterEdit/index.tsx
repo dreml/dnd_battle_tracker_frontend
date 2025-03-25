@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CampaignI } from "../../entities/campaign/model";
 import CharacterForm from "../../features/characterForm";
 import { RouteProps, useParams } from "react-router";
-import { CharacterNewT } from "../../entities/character/model";
+import { CharacterEditT } from "../../entities/character/model";
 import { campaignsQueryOptions } from "../../entities/campaign/queries";
 import { characterQueryOptions } from "../../entities/character/queries";
 import { useCharacterUpdateMutation } from "../../entities/character/mutations";
@@ -17,7 +17,7 @@ function characterEdit() {
 	const characterUpdateMutation = useCharacterUpdateMutation(characterId);
 	const campaigns: CampaignI[] = campaignsQuery.data ?? [];
 	const character = characterQuery?.data;
-	const onSubmit = (data: CharacterNewT) =>
+	const onSubmit = (data: CharacterEditT) =>
 		characterUpdateMutation.mutate(data);
 
 	const isPending =

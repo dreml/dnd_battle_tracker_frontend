@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addNewMonster, deleteMonster, updateMonster } from "../api";
 import { MonsterQueryKey } from "../queries";
-import { MonsterNewT } from "../model";
+import { MonsterEditT, MonsterNewT } from "../model";
 
 const useMonsterDeleteMutation = () => {
 	const queryClient = useQueryClient();
@@ -17,7 +17,7 @@ const useMonsterDeleteMutation = () => {
 const useMonsterUpdateMutation = (id: string) => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (data: MonsterNewT) => updateMonster(id, data),
+		mutationFn: (data: MonsterEditT) => updateMonster(id, data),
 		onSuccess: () => {
 			void queryClient.invalidateQueries({
 				queryKey: [MonsterQueryKey.monsters],

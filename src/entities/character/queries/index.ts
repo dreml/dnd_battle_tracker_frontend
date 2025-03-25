@@ -6,7 +6,7 @@ enum CharacterQueryKey {
 }
 
 const characterQueryOptions = (characterId: string) => ({
-	queryKey: [CharacterQueryKey.character],
+	queryKey: [CharacterQueryKey.character, characterId],
 	queryFn: () => getCharacter(characterId),
 });
 

@@ -11,7 +11,7 @@ const monstersQueryOptions = () => ({
 });
 
 const monsterQueryOptions = (id: string) => ({
-	queryKey: [MonsterQueryKey.monster],
+	queryKey: [MonsterQueryKey.monster, id],
 	queryFn: () => getMonster(id),
 });
 

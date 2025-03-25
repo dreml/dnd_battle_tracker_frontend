@@ -1,9 +1,13 @@
 import { Button, Flex, Form, Input, InputNumber, Select, Spin } from "antd";
-import { CharacterI, CharacterNewT } from "../../entities/character/model";
+import {
+	CharacterEditT,
+	CharacterI,
+	CharacterNewT,
+} from "../../entities/character/model";
 import { useEffect } from "react";
 import { CampaignI } from "../../entities/campaign/model";
 
-type FormValuesT = CharacterI | CharacterNewT;
+type FormValuesT = CharacterEditT | CharacterNewT;
 
 interface CharacterFormI {
 	onSubmit?: (data: FormValuesT) => void;
