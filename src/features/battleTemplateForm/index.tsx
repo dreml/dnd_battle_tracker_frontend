@@ -34,10 +34,12 @@ interface BattleTemplateFormPropsI {
 interface MonstersFormI extends MonsterForBattleI {
 	key: string;
 }
-
+const defaultInitialValues: BattleTemplateFormPropsI["initialValues"] = {
+	monsters: [],
+};
 function BattleTemplateForm({
 	onSubmit,
-	initialValues = { monsters: [] },
+	initialValues = defaultInitialValues,
 	isDisabled = false,
 	isPending = false,
 	campaigns = [],
