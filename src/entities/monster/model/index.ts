@@ -11,7 +11,6 @@ export interface MonsterI {
 
 export interface MonsterForBattleI {
 	id: string;
-	initiative: number;
 	health: number;
 	armor: number;
 }
