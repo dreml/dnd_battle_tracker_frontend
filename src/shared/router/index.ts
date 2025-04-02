@@ -22,5 +22,8 @@ export const getRouteBattleTemplateEdit = (id: string) =>
 	`${ROUTE_BATTLE_TEMPLATE_LIST}/${id}`;
 
 export const ROUTE_CAMPAIGN_LIST = `/${CAMPAIGNS}`;
+export const getRouteCampaignEdit = (id: string) =>
+	`${ROUTE_CAMPAIGN_LIST}/${id}`;
+
 export const ROUTE_BATTLE_LIST = `/${BATTLES}`;
 export const ROUTE_ACTIVE_CAMPAIGN = "active-campaign";
