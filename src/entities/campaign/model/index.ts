@@ -6,5 +6,11 @@ export interface CampaignI {
 	dateUpdated: number;
 }
 
-export type CampaignNewT = Omit<CampaignI, "id">;
-export type CampaignEditT = Omit<CampaignI, "id">;
+export type CampaignNewT = Omit<
+	CampaignI,
+	"id" | "dateCreated" | "dateUpdated"
+>;
+export type CampaignEditT = Omit<
+	CampaignI,
+	"id" | "dateCreated" | "dateUpdated"
+>;
