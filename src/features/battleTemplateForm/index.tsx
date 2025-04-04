@@ -52,11 +52,10 @@ function BattleTemplateForm({
 		const result = {
 			name,
 			campaignId,
-			monsters: battleMonsters.map(({ id, health, armor, initiative }) => ({
+			monsters: battleMonsters.map(({ id, health, armor }) => ({
 				id,
 				health,
 				armor,
-				initiative,
 			})),
 		};
 		onSubmit?.(result);
@@ -72,7 +71,6 @@ function BattleTemplateForm({
 		const newMonsterData: MonstersFormI = {
 			key: uniqueId(),
 			id,
-			initiative: 0,
 			health: monster?.health ?? 0,
 			armor: monster?.armor ?? 0,
 		};
@@ -116,26 +114,6 @@ function BattleTemplateForm({
 				<div>
 					{monsters.find(({ id }: { id: string }) => id === item.id)?.name}
 				</div>
-			),
-		},
-		{
-			title: "Инициатива",
-			dataIndex: "initiative",
-			key: "initiative",
-			width: "20%",
-			render: (_: unknown, item: MonstersFormI) => (
-				<Form.Item
-					name={`initiative-${item.key}`}
-					initialValue={item.initiative}
-					rules={[{ required: true, type: "integer", min: 0 }]}
-					noStyle={true}
-				>
-					<InputNumber
-						onChange={(value) =>
-							changeBattleMonster("initiative", item.key, value)
-						}
-					/>
-				</Form.Item>
 			),
 		},
 		{
@@ -219,7 +197,11 @@ function BattleTemplateForm({
 					}))}
 				/>
 			</Form.Item>
-			<Form.Item name="monsters" label="Добавить монстра">
+			<Form.Item
+				name="monsters"
+				label="Добавить монстра"
+				style={{ maxWidth: 600 }}
+			>
 				<Select
 					options={monsters.map(({ id, name }) => ({
 						value: id,

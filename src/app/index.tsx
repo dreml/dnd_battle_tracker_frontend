@@ -26,6 +26,8 @@ import CharacterEdit from "../pages/characterEdit";
 import BattleTemplateList from "../pages/battleTemplateList";
 import BattleTemplateNew from "../pages/battleTemplateNew";
 import BattleTemplateEdit from "../pages/battleTemplateEdit";
+import CampaignEdit from "../pages/campaignEdit";
+import CampaignNew from "../pages/campaignNew";
 
 const queryClient = new QueryClient();
 
@@ -37,7 +39,12 @@ function App() {
 					<ConfigProvider locale={Locale}>
 						<Routes>
 							<Route index element={<StartPage />} />
-							<Route path={CAMPAIGNS} element={<CampaignList />} />
+							<Route path={CAMPAIGNS}>
+								<Route index element={<CampaignList />} />
+								<Route path={ID} element={<CampaignEdit />} />
+								<Route path={NEW} element={<CampaignNew />} />
+							</Route>
+
 							<Route path={LIBRARY}>
 								<Route path={MONSTERS}>
 									<Route index element={<MonsterList />} />

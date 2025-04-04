@@ -1,6 +1,6 @@
-import { getCampaigns } from "../api";
+import { getCampaign, getCampaigns } from "../api";
 
-enum CampaignQueryKey {
+export enum CampaignQueryKey {
 	campaigns = "campaigns",
 	campaign = "campaign",
 }
@@ -10,4 +10,9 @@ const campaignsQueryOptions = () => ({
 	queryFn: getCampaigns,
 });
 
-export { campaignsQueryOptions };
+const campaignQueryOptions = (id: string) => ({
+	queryKey: [CampaignQueryKey.campaign, id],
+	queryFn: () => getCampaign(id),
+});
+
+export { campaignsQueryOptions, campaignQueryOptions };
