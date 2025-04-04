@@ -15,6 +15,7 @@ type FormValuesT = CampaignEditT | CampaignNewT;
 
 interface CampaignFormPropsI {
 	onSubmit?: (data: FormValuesT) => void;
+	onTouched?: (isTouched: boolean) => void;
 	initialValues?: CampaignI | { characters: string[] };
 	isDisabled?: boolean;
 	isPending?: boolean;
@@ -27,6 +28,7 @@ const defaultInitialValues: CampaignFormPropsI["initialValues"] = {
 
 function CampaignForm({
 	onSubmit,
+	onTouched,
 	initialValues = defaultInitialValues,
 	isDisabled = false,
 	isPending = false,
@@ -52,12 +54,14 @@ function CampaignForm({
 			...prevState,
 			characters?.find((character) => character.id === id),
 		]);
+		onTouched?.(true);
 	};
 
 	const deleteCharacter = (id: string) => {
 		setCampaignCharacters((prevState) =>
 			prevState.filter((character) => character.id !== id),
 		);
+		onTouched?.(true);
 	};
 
 	const onFinish = ({ name }: FormValuesT) => {
@@ -65,7 +69,12 @@ function CampaignForm({
 			name,
 			characters: campaignCharacters.map(({ id }) => id),
 		};
+		onTouched?.(false);
 		onSubmit?.(result);
+	};
+
+	const onValuesChange = () => {
+		onTouched?.(true);
 	};
 
 	const campaignCharactersColumns: ColumnsType<CharacterI> = [
@@ -142,6 +151,7 @@ function CampaignForm({
 		<Form
 			form={form}
 			onFinish={onFinish}
+			onValuesChange={onValuesChange}
 			initialValues={initialValues}
 			layout={"horizontal"}
 			disabled={isDisabled || isPending}

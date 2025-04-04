@@ -8,8 +8,10 @@ import CampaignForm from "../../features/campaignForm";
 import { charactersQueryOptions } from "../../entities/character/queries";
 import { CampaignEditT } from "../../entities/campaign/model";
 import { useCampaignUpdateMutation } from "../../entities/campaign/mutations";
+import { useState } from "react";
 
 function CampaignEdit() {
+	const [isCampaignTouched, setIsCampaignTouched] = useState(false);
 	const params: RouteProps = useParams();
 	const campaignId = params.id ?? "";
 	const campaignQuery = useQuery(campaignQueryOptions(campaignId));
@@ -36,6 +38,9 @@ function CampaignEdit() {
 	const onCampaignSave = (data: CampaignEditT) =>
 		campaignUpdateMutation.mutate(data);
 
+	const onCampaignTouchedChange = (isTouched: boolean) =>
+		setIsCampaignTouched(isTouched);
+
 	const tabItems: TabsProps["items"] = [
 		{
 			key: "1",
@@ -46,6 +51,7 @@ function CampaignEdit() {
 					characters={characters}
 					isPending={isPending}
 					onSubmit={onCampaignSave}
+					onTouched={onCampaignTouchedChange}
 				/>
 			),
 			icon: <TeamOutlined />,
@@ -55,6 +61,7 @@ function CampaignEdit() {
 			label: "Бой",
 			children: <h2>hey33!!</h2>,
 			icon: <ThunderboltOutlined />,
+			disabled: isCampaignTouched,
 		},
 	];
 
