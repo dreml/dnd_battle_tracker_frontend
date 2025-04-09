@@ -1,15 +1,12 @@
-import { Button, Flex, Form, Input, Select, Spin, Table } from "antd";
+import { Button, Flex, Form, Input, Select, Spin } from "antd";
 import {
 	CampaignEditT,
 	CampaignI,
 	CampaignNewT,
 } from "../../entities/campaign/model";
 import { CharacterI } from "../../entities/character/model";
-import { useEffect, useState } from "react";
-import { ColumnsType } from "antd/lib/table";
-import { SERVER_IMG } from "../../shared/config/api.ts";
-import { DeleteOutlined } from "@ant-design/icons";
-import { sortByAlphabet, sortByNumber } from "../../shared/lib";
+import { useEffect } from "react";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 
 type FormValuesT = CampaignEditT | CampaignNewT;
 
@@ -34,127 +31,28 @@ function CampaignForm({
 	isPending = false,
 	characters = [],
 }: CampaignFormPropsI) {
-	const [campaignCharacters, setCampaignCharacters] = useState<CharacterI[]>(
-		[],
-	);
+	const [campaignForm] = Form.useForm<FormValuesT>();
+	const formCharacters = Form.useWatch("characters", campaignForm);
 
-	const [form] = Form.useForm();
 	useEffect(() => {
-		form.resetFields();
-		if (initialValues?.characters && characters.length > 0) {
-			const newCampaignCharacters = initialValues?.characters.map((id) => {
-				return characters.find((char) => char.id === id);
-			});
-			setCampaignCharacters(newCampaignCharacters);
-		}
-	}, [initialValues, characters]);
+		campaignForm.resetFields();
+	}, [initialValues]);
 
-	const addCharacter = (id: string) => {
-		setCampaignCharacters((prevState) => [
-			...prevState,
-			characters?.find((character) => character.id === id),
-		]);
-		onTouched?.(true);
-	};
-
-	const deleteCharacter = (id: string) => {
-		setCampaignCharacters((prevState) =>
-			prevState.filter((character) => character.id !== id),
-		);
-		onTouched?.(true);
-	};
-
-	const onFinish = ({ name }: FormValuesT) => {
-		const result = {
-			name,
-			characters: campaignCharacters.map(({ id }) => id),
-		};
-		onTouched?.(false);
-		onSubmit?.(result);
+	const onFinish = (values: any) => {
+		onSubmit?.(values);
 	};
 
 	const onValuesChange = () => {
 		onTouched?.(true);
 	};
-
-	const campaignCharactersColumns: ColumnsType<CharacterI> = [
-		{
-			title: "Изображение",
-			dataIndex: "image",
-			key: "image",
-			width: "15%",
-			render: (image: string, item: CharacterI) => {
-				if (image) {
-					return (
-						<img
-							src={`${SERVER_IMG}${image}`}
-							width={50}
-							height={50}
-							alt={`${item.name}`}
-						/>
-					);
-				} else {
-					return null;
-				}
-			},
-		},
-		{
-			title: "Имя",
-			dataIndex: "name",
-			key: "name",
-			width: "20%",
-			sorter: (a: CharacterI, b: CharacterI) => sortByAlphabet(a.name, b.name),
-			sortDirections: ["descend", "ascend"],
-		},
-		{
-			title: "Имя игрока",
-			dataIndex: "playerName",
-			key: "playerName",
-			width: "20%",
-			sorter: (a: CharacterI, b: CharacterI) =>
-				sortByAlphabet(a.playerName, b.playerName),
-			sortDirections: ["descend", "ascend"],
-		},
-		{
-			title: "Здоровье",
-			dataIndex: "health",
-			key: "health",
-			width: "10%",
-			sorter: (a: CharacterI, b: CharacterI) =>
-				sortByNumber(a.health, b.health),
-			sortDirections: ["descend", "ascend"],
-		},
-		{
-			title: "Броня",
-			dataIndex: "armor",
-			key: "armor",
-			width: "10%",
-			sorter: (a: CharacterI, b: CharacterI) => sortByNumber(a.armor, b.armor),
-			sortDirections: ["descend", "ascend"],
-		},
-		{
-			title: "",
-			dataIndex: "description",
-			key: "description",
-			width: "30%",
-			render: (_: unknown, item: CharacterI) => (
-				<Flex gap="small" wrap>
-					<Button
-						icon={<DeleteOutlined />}
-						onClick={() => deleteCharacter(item.id)}
-					/>
-				</Flex>
-			),
-		},
-	];
 	return (
 		<Form
-			form={form}
-			onFinish={onFinish}
-			onValuesChange={onValuesChange}
+			form={campaignForm}
 			initialValues={initialValues}
 			layout={"horizontal"}
 			disabled={isDisabled || isPending}
+			onFinish={onFinish}
+			onFieldsChange={onValuesChange}
 		>
 			<Form.Item
 				name="name"
@@ -164,27 +62,85 @@ function CampaignForm({
 			>
 				<Input />
 			</Form.Item>
-			<Form.Item
-				name="monsters"
-				label="Добавить персонажа"
-				style={{ maxWidth: 600 }}
-			>
-				<Select
-					options={characters.map(({ id, name, playerName }) => ({
-						value: id,
-						label: `${name} (${playerName})`,
-						disabled: !!campaignCharacters.find((char) => char.id === id),
-					}))}
-					onSelect={(id) => addCharacter(id)}
-				/>
-			</Form.Item>
-			{campaignCharacters.length > 0 && (
-				<Table
-					dataSource={campaignCharacters}
-					columns={campaignCharactersColumns}
-					rowKey="id"
-				/>
+			{characters.length > 0 && (
+				<Form.List name="characters">
+					{(campaignCharacters, { add, remove }) => (
+						<div>
+							{campaignCharacters.map((campaignCharacter, index) => {
+								//TODO: тут приложение периодически падает, т.к. formCharacters == undefined
+								const characterId = formCharacters[index];
+								const characterFullData = characters.find(
+									({ id }) => id === characterId,
+								);
+								return (
+									<Flex
+										key={campaignCharacter.key}
+										gap="middle"
+										align="baseline"
+									>
+										<Form.Item
+											{...campaignCharacter}
+											style={{ width: "25%" }}
+											rules={[
+												{ required: true, message: "Выберите персонажа" },
+											]}
+										>
+											<Select
+												options={characters.map(({ id, name, playerName }) => ({
+													value: id,
+													label: `${name} (${playerName})`,
+													disabled: !!formCharacters.find(
+														(char) => char === id,
+													),
+												}))}
+												showSearch
+												placeholder="Выберите персонажа"
+												optionFilterProp="label"
+											/>
+										</Form.Item>
+										<Form.Item>
+											<Input
+												placeholder="Имя игрока"
+												disabled={true}
+												value={characterFullData?.playerName}
+											/>
+										</Form.Item>
+										<Form.Item>
+											<Input
+												placeholder="Здоровье"
+												disabled={true}
+												value={characterFullData?.health}
+											/>
+										</Form.Item>
+										<Form.Item>
+											<Input
+												placeholder="Броня"
+												disabled={true}
+												value={characterFullData?.armor}
+											/>
+										</Form.Item>
+
+										<CloseOutlined
+											onClick={() => remove(campaignCharacter.name)}
+										/>
+									</Flex>
+								);
+							})}
+							<Form.Item style={{ maxWidth: "25%" }}>
+								<Button
+									type="dashed"
+									onClick={() => add()}
+									block
+									icon={<PlusOutlined />}
+								>
+									Добавить персонажа
+								</Button>
+							</Form.Item>
+						</div>
+					)}
+				</Form.List>
 			)}
+
 			<Form.Item>
 				<Flex gap={"small"} align={"center"}>
 					<Button type="primary" htmlType="submit">

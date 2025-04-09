@@ -36,7 +36,9 @@ function CampaignEdit() {
 		campaignUpdateMutation.isPending;
 
 	const onCampaignSave = (data: CampaignEditT) =>
-		campaignUpdateMutation.mutate(data);
+		campaignUpdateMutation
+			.mutateAsync(data)
+			.then(() => setIsCampaignTouched(false));
 
 	const onCampaignTouchedChange = (isTouched: boolean) =>
 		setIsCampaignTouched(isTouched);
