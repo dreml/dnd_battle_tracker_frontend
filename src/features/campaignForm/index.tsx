@@ -1,4 +1,15 @@
-import { Button, Flex, Form, Input, Select, Spin } from "antd";
+import {
+	Button,
+	Col,
+	Divider,
+	Flex,
+	Form,
+	Input,
+	InputNumber,
+	Row,
+	Select,
+	Spin,
+} from "antd";
 import {
 	CampaignEditT,
 	CampaignI,
@@ -32,7 +43,6 @@ function CampaignForm({
 	characters = [],
 }: CampaignFormPropsI) {
 	const [campaignForm] = Form.useForm<FormValuesT>();
-	const formCharacters = Form.useWatch("characters", campaignForm);
 
 	useEffect(() => {
 		campaignForm.resetFields();
@@ -62,71 +72,77 @@ function CampaignForm({
 			>
 				<Input />
 			</Form.Item>
+			<div style={{ maxWidth: "600px" }}>
+				<Divider orientation="left">Персонажи</Divider>
+				<Row justify="space-between">
+					<Col span={8}>Имя</Col>
+					<Col span={4}>Здоровье</Col>
+					<Col span={4}>Броня</Col>
+					<Col span={1}></Col>
+				</Row>
+			</div>
 			{characters.length > 0 && (
 				<Form.List name="characters">
 					{(campaignCharacters, { add, remove }) => (
-						<div>
+						<div style={{ maxWidth: "600px" }}>
 							{campaignCharacters.map((campaignCharacter, index) => {
-								//TODO: тут приложение периодически падает, т.к. formCharacters == undefined
-								const characterId = formCharacters[index];
+								const characterId =
+									campaignForm.getFieldValue("characters")[index];
 								const characterFullData = characters.find(
 									({ id }) => id === characterId,
 								);
 								return (
-									<Flex
-										key={campaignCharacter.key}
-										gap="middle"
-										align="baseline"
-									>
-										<Form.Item
-											{...campaignCharacter}
-											style={{ width: "25%" }}
-											rules={[
-												{ required: true, message: "Выберите персонажа" },
-											]}
-										>
-											<Select
-												options={characters.map(({ id, name, playerName }) => ({
-													value: id,
-													label: `${name} (${playerName})`,
-													disabled: !!formCharacters.find(
-														(char) => char === id,
-													),
-												}))}
-												showSearch
-												placeholder="Выберите персонажа"
-												optionFilterProp="label"
+									<Row key={campaignCharacter.key} justify="space-between">
+										<Col span={8}>
+											<Form.Item
+												{...campaignCharacter}
+												rules={[
+													{ required: true, message: "Выберите персонажа" },
+												]}
+											>
+												<Select
+													options={characters.map(
+														({ id, name, playerName }) => ({
+															value: id,
+															label: `${name} (${playerName})`,
+															disabled: campaignForm
+																.getFieldValue("characters")
+																.find((char: string) => char === id),
+														}),
+													)}
+													showSearch
+													placeholder="Выберите персонажа"
+													optionFilterProp="label"
+												/>
+											</Form.Item>
+										</Col>
+										<Col span={4}>
+											<Form.Item>
+												<InputNumber
+													placeholder="Здоровье"
+													disabled={true}
+													value={characterFullData?.health}
+												/>
+											</Form.Item>
+										</Col>
+										<Col span={4}>
+											<Form.Item>
+												<InputNumber
+													placeholder="Броня"
+													disabled={true}
+													value={characterFullData?.armor}
+												/>
+											</Form.Item>
+										</Col>
+										<Col span={1}>
+											<CloseOutlined
+												onClick={() => remove(campaignCharacter.name)}
 											/>
-										</Form.Item>
-										<Form.Item>
-											<Input
-												placeholder="Имя игрока"
-												disabled={true}
-												value={characterFullData?.playerName}
-											/>
-										</Form.Item>
-										<Form.Item>
-											<Input
-												placeholder="Здоровье"
-												disabled={true}
-												value={characterFullData?.health}
-											/>
-										</Form.Item>
-										<Form.Item>
-											<Input
-												placeholder="Броня"
-												disabled={true}
-												value={characterFullData?.armor}
-											/>
-										</Form.Item>
-
-										<CloseOutlined
-											onClick={() => remove(campaignCharacter.name)}
-										/>
-									</Flex>
+										</Col>
+									</Row>
 								);
 							})}
-							<Form.Item style={{ maxWidth: "25%" }}>
+							<Form.Item>
 								<Button
 									type="dashed"
 									onClick={() => add()}

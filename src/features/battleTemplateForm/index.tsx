@@ -141,7 +141,7 @@ function BattleTemplateForm({
 										rules={[{ required: true, type: "integer", min: 0 }]}
 										noStyle={true}
 									>
-										<InputNumber />
+										<InputNumber placeholder="Здоровье" />
 									</Form.Item>
 								</Col>
 								<Col span={4}>
@@ -151,7 +151,7 @@ function BattleTemplateForm({
 										rules={[{ required: true, type: "integer", min: 0 }]}
 										noStyle={true}
 									>
-										<InputNumber />
+										<InputNumber placeholder="Броня" />
 									</Form.Item>
 								</Col>
 								<Col span={1}>
@@ -159,7 +159,7 @@ function BattleTemplateForm({
 								</Col>
 							</Row>
 						))}
-						<Form.Item style={{ maxWidth: "25%" }}>
+						<Form.Item>
 							<Button
 								type="dashed"
 								onClick={() => add({ id: null, armor: 0, health: 0 })}
