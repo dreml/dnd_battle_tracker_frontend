@@ -10,5 +10,10 @@ export interface CharacterI {
 	playerName: string;
 }
 
+export interface CharacterForBattleI {
+	id: string;
+	initiative?: number;
+}
+
 export type CharacterNewT = Omit<CharacterI, "id">;
 export type CharacterEditT = Omit<CharacterI, "id">;

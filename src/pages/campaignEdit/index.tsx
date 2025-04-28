@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import PageWrapper from "../../shared/ui/pageWrapper";
 import { RouteProps, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -8,7 +10,9 @@ import CampaignForm from "../../features/campaignForm";
 import { charactersQueryOptions } from "../../entities/character/queries";
 import { CampaignEditT } from "../../entities/campaign/model";
 import { useCampaignUpdateMutation } from "../../entities/campaign/mutations";
-import { useState } from "react";
+import BattlePrepare from "../../features/battlePrepare";
+import { monstersQueryOptions } from "../../entities/monster/queries";
+import { battleTemplatesQueryOptions } from "../../entities/battleTemplate/queries";
 
 function CampaignEdit() {
 	const [isCampaignTouched, setIsCampaignTouched] = useState(false);
@@ -20,19 +24,31 @@ function CampaignEdit() {
 	const charactersQuery = useQuery(charactersQueryOptions());
 	const characters = charactersQuery.data ?? [];
 
+	const monstersQuery = useQuery(monstersQueryOptions());
+	const monsters = monstersQuery.data ?? [];
+
+	const battleTemplatesQuery = useQuery(battleTemplatesQueryOptions());
+	const battleTemplates = battleTemplatesQuery.data ?? [];
+
 	const campaignUpdateMutation = useCampaignUpdateMutation(campaignId);
 
 	const isError =
 		campaignQuery.isError ||
 		charactersQuery.isError ||
+		monstersQuery.isError ||
+		battleTemplatesQuery.isError ||
 		campaignUpdateMutation.isError;
 	const errorMessage =
 		campaignQuery.error?.message ||
 		charactersQuery.error?.message ||
+		monstersQuery.error?.message ||
+		battleTemplatesQuery.error?.message ||
 		campaignUpdateMutation.error?.message;
 	const isPending =
 		campaignQuery.isPending ||
 		charactersQuery.isPending ||
+		monstersQuery.isPending ||
+		battleTemplatesQuery.isPending ||
 		campaignUpdateMutation.isPending;
 
 	const onCampaignSave = (data: CampaignEditT) =>
@@ -42,6 +58,8 @@ function CampaignEdit() {
 
 	const onCampaignTouchedChange = (isTouched: boolean) =>
 		setIsCampaignTouched(isTouched);
+
+	const onBattleStart = () => {};
 
 	const tabItems: TabsProps["items"] = [
 		{
@@ -61,7 +79,20 @@ function CampaignEdit() {
 		{
 			key: "2",
 			label: "Бой",
-			children: <h2>hey33!!</h2>,
+			children: (
+				<div>
+					{campaign && (
+						<BattlePrepare
+							campaign={campaign}
+							characters={characters}
+							monsters={monsters}
+							battleTemplates={battleTemplates}
+							onBattleStart={onBattleStart}
+							isPending={isPending}
+						/>
+					)}
+				</div>
+			),
 			icon: <ThunderboltOutlined />,
 			disabled: isCampaignTouched,
 		},
