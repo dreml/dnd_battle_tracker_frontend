@@ -1,7 +1,7 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
 import { useQuery } from "@tanstack/react-query";
 import { charactersQueryOptions } from "../../entities/character/queries";
-import CampaignForm from "../../features/campaignForm";
+import CampaignForm from "../../widgets/campaignForm";
 import { useCampaignCreateMutation } from "../../entities/campaign/mutations";
 import { getRouteCampaignEdit } from "../../shared/router";
 import { CampaignNewT } from "../../entities/campaign/model";

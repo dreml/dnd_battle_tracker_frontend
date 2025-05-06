@@ -6,11 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import { campaignQueryOptions } from "../../entities/campaign/queries";
 import { Tabs, TabsProps } from "antd";
 import { TeamOutlined, ThunderboltOutlined } from "@ant-design/icons";
-import CampaignForm from "../../features/campaignForm";
+import CampaignForm from "../../widgets/campaignForm";
 import { charactersQueryOptions } from "../../entities/character/queries";
 import { CampaignEditT } from "../../entities/campaign/model";
 import { useCampaignUpdateMutation } from "../../entities/campaign/mutations";
-import BattlePrepare from "../../features/battlePrepare";
+import BattlePrepare from "../../widgets/battlePrepare";
 import { monstersQueryOptions } from "../../entities/monster/queries";
 import { battleTemplatesQueryOptions } from "../../entities/battleTemplate/queries";
 
@@ -19,6 +19,7 @@ function CampaignEdit() {
 	const params: RouteProps = useParams();
 	const campaignId = params.id ?? "";
 	const campaignQuery = useQuery(campaignQueryOptions(campaignId));
+	// TODO: при сохранении не обновляется campaign в самом компоненте => в дочерних компонентах тоже не обновляется
 	const campaign = campaignQuery?.data;
 
 	const charactersQuery = useQuery(charactersQueryOptions());

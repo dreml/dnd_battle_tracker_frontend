@@ -55,6 +55,8 @@ function CampaignForm({
 	const onValuesChange = () => {
 		onTouched?.(true);
 	};
+
+	//TODO: to fix: при добавлении новых персонажей не устанавливаются их значения брони и хп
 	return (
 		<Form
 			form={campaignForm}

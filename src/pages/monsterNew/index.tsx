@@ -1,5 +1,5 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
-import MonsterForm from "../../features/monsterForm";
+import MonsterForm from "../../widgets/monsterForm";
 import { MonsterNewT } from "../../entities/monster/model";
 import { useNavigate } from "react-router";
 import { ROUTE_MONSTER_LIST } from "../../shared/router";
