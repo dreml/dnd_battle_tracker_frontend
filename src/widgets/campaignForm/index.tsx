@@ -112,6 +112,7 @@ function CampaignForm({
 																.find((char: string) => char === id),
 														}),
 													)}
+													// TODO: добавить действие при выборе
 													showSearch
 													placeholder="Выберите персонажа"
 													optionFilterProp="label"

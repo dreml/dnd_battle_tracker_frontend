@@ -6,7 +6,7 @@ import {
 import { MonsterI } from "../../entities/monster/model";
 import { BattleTemplateI } from "../../entities/battleTemplate/model";
 import { BattleI } from "../../entities/battle/model";
-import { useEffect } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
 	Button,
 	Col,
@@ -20,6 +20,21 @@ import {
 } from "antd";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { sortByField } from "../../shared/lib";
+import {
+	closestCenter,
+	DndContext,
+	DragEndEvent,
+	PointerSensor,
+	useSensor,
+	useSensors,
+} from "@dnd-kit/core";
+import {
+	arrayMove,
+	SortableContext,
+	useSortable,
+	verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 enum BattleMemberType {
 	character = "character",
@@ -48,6 +63,86 @@ interface BattlePrepareFormI {
 	members: FormMemberI[];
 }
 
+function BattleMemberItem({
+	member,
+	onFieldChange,
+}: {
+	member: FormMemberI;
+	onFieldChange: (
+		id: FormMemberI["id"],
+		field: keyof FormMemberI,
+		data: string,
+	) => {};
+}) {
+	const { attributes, listeners, setNodeRef, transform, transition } =
+		useSortable({ id: member.id });
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+	};
+	const [battleMemberForm] = Form.useForm<FormMemberI>();
+	useEffect(() => {
+		battleMemberForm.resetFields();
+	}, [member]);
+	return (
+		<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+			<Form initialValues={member} form={battleMemberForm}>
+				<Row justify="space-between">
+					<Col span={8}>
+						<Form.Item name={"name"} noStyle={true}>
+							<Input placeholder="name" disabled />
+						</Form.Item>
+					</Col>
+					<Col span={4}>
+						<Form.Item
+							name={"health"}
+							rules={[{ required: true, type: "integer", min: 0 }]}
+							noStyle={true}
+						>
+							<InputNumber
+								placeholder="Здоровье"
+								disabled={member?.type === BattleMemberType.character}
+							/>
+						</Form.Item>
+					</Col>
+					<Col span={4}>
+						<Form.Item
+							name={"armor"}
+							rules={[{ required: true, type: "integer", min: 0 }]}
+							noStyle={true}
+						>
+							<InputNumber
+								placeholder="Броня"
+								disabled={member?.type === BattleMemberType.character}
+							/>
+						</Form.Item>
+					</Col>
+					<Col span={4}>
+						<Form.Item
+							name={"initiative"}
+							rules={[{ required: true, type: "integer", min: 0 }]}
+							noStyle={true}
+						>
+							<InputNumber
+								placeholder="Инициатива"
+								onBlur={(event: ChangeEvent<HTMLInputElement>) =>
+									onFieldChange(member.id, "initiative", event.target.value)
+								}
+							/>
+						</Form.Item>
+					</Col>
+
+					<Col span={1}>
+						{member?.type === BattleMemberType.monster && (
+							<CloseOutlined onClick={() => console.log(member.id)} />
+						)}
+					</Col>
+				</Row>
+			</Form>
+		</div>
+	);
+}
+
 function BattlePrepare({
 	campaign = { characters: [] },
 	characters,
@@ -56,7 +151,8 @@ function BattlePrepare({
 	isPending = false,
 	onBattleStart,
 }: BattlePreparePropsI) {
-	const [battlePrepareForm] = Form.useForm<BattlePrepareFormI>();
+	// const [battlePrepareForm] = Form.useForm<BattlePrepareFormI>();
+	const [battlePrepareData, setBattlePrepareData] = useState<FormMemberI[]>([]);
 
 	useEffect(() => {
 		const newFormData = campaign.characters?.map((id) => {
@@ -70,130 +166,76 @@ function BattlePrepare({
 				type: BattleMemberType.character,
 			};
 		});
-		battlePrepareForm.setFieldsValue({
-			members: newFormData,
-		});
+		setBattlePrepareData(newFormData);
 	}, [campaign]);
 
 	const onFinish = (data) => {
 		console.log(data);
 	};
 
-	const onInitiativeChange = () => {
-		const battleMemberData = [...battlePrepareForm.getFieldValue("members")];
-		battleMemberData.sort(sortByField<FormMemberI>("initiative", false));
-		battlePrepareForm.setFieldsValue({
-			members: battleMemberData,
+	const onMemberDataChange = (
+		id: FormMemberI["id"],
+		field: keyof FormMemberI,
+		value: string,
+	) => {
+		setBattlePrepareData((oldData) => {
+			const newData = oldData.map((member) => {
+				if (member.id === id) {
+					member[field] = value;
+				}
+				return member;
+			});
+			if (field === "initiative") {
+				newData.sort(sortByField<FormMemberI>("initiative", false));
+			}
+			return newData;
 		});
 	};
 
+	const onDragEnd = ({ active, over }: DragEndEvent) => {
+		console.log(active.id, over?.id);
+		if (active.id !== over?.id) {
+			setBattlePrepareData((items) => {
+				const oldIndex = items.findIndex((member) => member.id === active.id);
+				const newIndex = items.findIndex((member) => member.id === over?.id);
+				items[oldIndex] = {
+					...items[oldIndex],
+					initiative: items[newIndex].initiative,
+				};
+				return arrayMove(items, oldIndex, newIndex);
+			});
+		}
+	};
+
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: {
+				distance: 1,
+			},
+		}),
+	);
+
 	return (
-		<Form form={battlePrepareForm} onFinish={onFinish}>
-			<div style={{ maxWidth: "600px" }}>
-				<Divider orientation="left">Участники битвы</Divider>
-				<Row justify="space-between">
-					<Col span={8}>Имя</Col>
-					<Col span={4}>Здоровье</Col>
-					<Col span={4}>Броня</Col>
-					<Col span={4}>Инициатива</Col>
-					<Col span={1}></Col>
-				</Row>
-			</div>
-			<Form.List name="members">
-				{(battleMembers, { add, remove }) => (
-					<div style={{ maxWidth: "600px" }}>
-						{battleMembers.map((battleMember, index) => {
-							const battleMemberData =
-								battlePrepareForm.getFieldValue("members")[index];
-							return (
-								<Row key={battleMember.key} justify="space-between">
-									<Col span={8}>
-										<Form.Item
-											{...battleMember}
-											name={[battleMember.name, "name"]}
-											noStyle={true}
-										>
-											<Input placeholder="name" disabled />
-										</Form.Item>
-									</Col>
-									<Col span={4}>
-										<Form.Item
-											{...battleMember}
-											name={[battleMember.name, "health"]}
-											rules={[{ required: true, type: "integer", min: 0 }]}
-											noStyle={true}
-										>
-											<InputNumber
-												placeholder="Здоровье"
-												disabled={
-													battleMemberData?.type === BattleMemberType.character
-												}
-											/>
-										</Form.Item>
-									</Col>
-									<Col span={4}>
-										<Form.Item
-											{...battleMember}
-											name={[battleMember.name, "armor"]}
-											rules={[{ required: true, type: "integer", min: 0 }]}
-											noStyle={true}
-										>
-											<InputNumber
-												placeholder="Броня"
-												disabled={
-													battleMemberData?.type === BattleMemberType.character
-												}
-											/>
-										</Form.Item>
-									</Col>
-									<Col span={4}>
-										<Form.Item
-											{...battleMember}
-											name={[battleMember.name, "initiative"]}
-											rules={[{ required: true, type: "integer", min: 0 }]}
-											noStyle={true}
-										>
-											<InputNumber
-												placeholder="Инициатива"
-												onPressEnter={onInitiativeChange}
-												onBlur={onInitiativeChange}
-											/>
-										</Form.Item>
-									</Col>
-
-									<Col span={1}>
-										{battleMemberData?.type === BattleMemberType.monster && (
-											<CloseOutlined
-												onClick={() => remove(battleMember.name)}
-											/>
-										)}
-									</Col>
-								</Row>
-							);
-						})}
-						<Form.Item>
-							<Button
-								type="dashed"
-								onClick={() => add()}
-								block
-								icon={<PlusOutlined />}
-							>
-								Добавить участника битвы
-							</Button>
-						</Form.Item>
-					</div>
-				)}
-			</Form.List>
-
-			<Form.Item>
-				<Flex gap={"small"} align={"center"}>
-					<Button type="primary" htmlType="submit">
-						Начать бой
-					</Button>
-					{isPending && <Spin />}
-				</Flex>
-			</Form.Item>
-		</Form>
+		<>
+			<DndContext
+				sensors={sensors}
+				collisionDetection={closestCenter}
+				onDragEnd={onDragEnd}
+			>
+				<SortableContext
+					items={battlePrepareData}
+					strategy={verticalListSortingStrategy}
+				>
+					{battlePrepareData.map((member) => (
+						<BattleMemberItem
+							key={member.id}
+							onFieldChange={onMemberDataChange}
+							member={member}
+						/>
+					))}
+				</SortableContext>
+			</DndContext>
+		</>
 	);
 }
 
