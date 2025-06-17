@@ -18,6 +18,7 @@ import {
 import { CharacterI } from "../../entities/character/model";
 import { useEffect } from "react";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import AddEntityButton from "../../shared/ui/addEntityButton";
 
 type FormValuesT = CampaignEditT | CampaignNewT;
 
@@ -146,14 +147,7 @@ function CampaignForm({
 								);
 							})}
 							<Form.Item>
-								<Button
-									type="dashed"
-									onClick={() => add()}
-									block
-									icon={<PlusOutlined />}
-								>
-									Добавить персонажа
-								</Button>
+								<AddEntityButton header="Добавить персонажа" onClick={add} />
 							</Form.Item>
 						</div>
 					)}

@@ -16,10 +16,11 @@ import {
 	Input,
 	InputNumber,
 	Row,
+	Select,
 	Spin,
 } from "antd";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
-import { sortByField } from "../../shared/lib";
+import { sortByField, uniqueId } from "../../shared/lib";
 import {
 	closestCenter,
 	DndContext,
@@ -35,6 +36,7 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import AddEntityButton from "../../shared/ui/addEntityButton";
 
 enum BattleMemberType {
 	character = "character",
@@ -52,6 +54,7 @@ interface BattlePreparePropsI {
 
 interface FormMemberI {
 	id: string;
+	key: string;
 	name: string;
 	type: string;
 	initiative: number;
@@ -66,19 +69,22 @@ interface BattlePrepareFormI {
 function BattleMemberItem({
 	member,
 	onFieldChange,
+	onDelete,
 }: {
 	member: FormMemberI;
 	onFieldChange: (
-		id: FormMemberI["id"],
+		key: FormMemberI["key"],
 		field: keyof FormMemberI,
 		data: string,
-	) => {};
+	) => void;
+	onDelete: (key: FormMemberI["key"]) => void;
 }) {
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({ id: member.id });
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
+		marginBottom: "20px",
 	};
 	const [battleMemberForm] = Form.useForm<FormMemberI>();
 	useEffect(() => {
@@ -126,7 +132,7 @@ function BattleMemberItem({
 							<InputNumber
 								placeholder="Инициатива"
 								onBlur={(event: ChangeEvent<HTMLInputElement>) =>
-									onFieldChange(member.id, "initiative", event.target.value)
+									onFieldChange(member.key, "initiative", event.target.value)
 								}
 							/>
 						</Form.Item>
@@ -134,7 +140,7 @@ function BattleMemberItem({
 
 					<Col span={1}>
 						{member?.type === BattleMemberType.monster && (
-							<CloseOutlined onClick={() => console.log(member.id)} />
+							<CloseOutlined onClick={() => onDelete(member.key)} />
 						)}
 					</Col>
 				</Row>
@@ -151,7 +157,6 @@ function BattlePrepare({
 	isPending = false,
 	onBattleStart,
 }: BattlePreparePropsI) {
-	// const [battlePrepareForm] = Form.useForm<BattlePrepareFormI>();
 	const [battlePrepareData, setBattlePrepareData] = useState<FormMemberI[]>([]);
 
 	useEffect(() => {
@@ -159,6 +164,7 @@ function BattlePrepare({
 			const characterData = characters.find((char) => char.id === id);
 			return {
 				id,
+				key: uniqueId(),
 				name: `${characterData?.name}(${characterData?.playerName})`,
 				initiative: 0,
 				armor: characterData?.armor,
@@ -174,17 +180,18 @@ function BattlePrepare({
 	};
 
 	const onMemberDataChange = (
-		id: FormMemberI["id"],
+		key: FormMemberI["key"],
 		field: keyof FormMemberI,
 		value: string,
 	) => {
 		setBattlePrepareData((oldData) => {
 			const newData = oldData.map((member) => {
-				if (member.id === id) {
+				if (member.key === key) {
 					member[field] = value;
 				}
 				return member;
 			});
+			debugger;
 			if (field === "initiative") {
 				newData.sort(sortByField<FormMemberI>("initiative", false));
 			}
@@ -192,8 +199,28 @@ function BattlePrepare({
 		});
 	};
 
+	const onMonsterAdd = (id: FormMemberI["id"]) => {
+		setBattlePrepareData((oldData) => {
+			const monster = monsters?.find((data) => data.id === id);
+			return oldData.concat({
+				id,
+				key: uniqueId(),
+				type: BattleMemberType.monster,
+				name: monster?.name ?? "",
+				health: monster?.health ?? 0,
+				armor: monster?.armor ?? 0,
+				initiative: 0,
+			});
+		});
+	};
+
+	const onBattleMemberDelete = (key: FormMemberI["key"]) => {
+		setBattlePrepareData((oldData) =>
+			oldData.filter((member) => member.key !== key),
+		);
+	};
+
 	const onDragEnd = ({ active, over }: DragEndEvent) => {
-		console.log(active.id, over?.id);
 		if (active.id !== over?.id) {
 			setBattlePrepareData((items) => {
 				const oldIndex = items.findIndex((member) => member.id === active.id);
@@ -217,24 +244,67 @@ function BattlePrepare({
 
 	return (
 		<>
-			<DndContext
-				sensors={sensors}
-				collisionDetection={closestCenter}
-				onDragEnd={onDragEnd}
-			>
-				<SortableContext
-					items={battlePrepareData}
-					strategy={verticalListSortingStrategy}
-				>
-					{battlePrepareData.map((member) => (
-						<BattleMemberItem
-							key={member.id}
-							onFieldChange={onMemberDataChange}
-							member={member}
-						/>
-					))}
-				</SortableContext>
-			</DndContext>
+			<Row justify="space-between">
+				<Col span={16}>
+					<Divider orientation="left">Участники битвы</Divider>
+					<DndContext
+						sensors={sensors}
+						collisionDetection={closestCenter}
+						onDragEnd={onDragEnd}
+					>
+						<SortableContext
+							items={battlePrepareData}
+							strategy={verticalListSortingStrategy}
+						>
+							{battlePrepareData.map((member) => (
+								<BattleMemberItem
+									key={member.key}
+									onFieldChange={onMemberDataChange}
+									onDelete={onBattleMemberDelete}
+									member={member}
+								/>
+							))}
+						</SortableContext>
+					</DndContext>
+				</Col>
+				<Col span={7}>
+					<Row>
+						<Col span={24}>
+							<Divider orientation="left">Добавить из шаблона</Divider>
+							<Select
+								style={{
+									width: "100%",
+								}}
+								options={battleTemplates.map(({ id, name }) => ({
+									value: id,
+									label: `${name}`,
+								}))}
+								showSearch
+								placeholder="Выберите шаблон"
+								optionFilterProp="label"
+							/>
+						</Col>
+					</Row>
+					<Row>
+						<Col span={24}>
+							<Divider orientation="left">Добавить из монстра</Divider>
+							<Select
+								style={{
+									width: "100%",
+								}}
+								options={monsters.map(({ id, name }) => ({
+									value: id,
+									label: `${name}`,
+								}))}
+								showSearch
+								placeholder="Выберите монстра"
+								optionFilterProp="label"
+								onSelect={onMonsterAdd}
+							/>
+						</Col>
+					</Row>
+				</Col>
+			</Row>
 		</>
 	);
 }
