@@ -3,10 +3,10 @@ import {
 	CharacterForBattleI,
 	CharacterI,
 } from "../../entities/character/model";
-import { MonsterI } from "../../entities/monster/model";
+import { MonsterForBattleI, MonsterI } from "../../entities/monster/model";
 import { BattleTemplateI } from "../../entities/battleTemplate/model";
 import { BattleI } from "../../entities/battle/model";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
 	Button,
 	Col,
@@ -19,7 +19,7 @@ import {
 	Select,
 	Spin,
 } from "antd";
-import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
 import { sortByField, uniqueId } from "../../shared/lib";
 import {
 	closestCenter,
@@ -36,7 +36,6 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import AddEntityButton from "../../shared/ui/addEntityButton";
 
 enum BattleMemberType {
 	character = "character",
@@ -62,10 +61,6 @@ interface FormMemberI {
 	health?: number;
 }
 
-interface BattlePrepareFormI {
-	members: FormMemberI[];
-}
-
 function BattleMemberItem({
 	member,
 	onFieldChange,
@@ -85,6 +80,7 @@ function BattleMemberItem({
 		transform: CSS.Transform.toString(transform),
 		transition,
 		marginBottom: "20px",
+		cursor: "grab",
 	};
 	const [battleMemberForm] = Form.useForm<FormMemberI>();
 	useEffect(() => {
@@ -108,6 +104,9 @@ function BattleMemberItem({
 							<InputNumber
 								placeholder="Здоровье"
 								disabled={member?.type === BattleMemberType.character}
+								onBlur={(event: ChangeEvent<HTMLInputElement>) =>
+									onFieldChange(member.key, "health", event.target.value)
+								}
 							/>
 						</Form.Item>
 					</Col>
@@ -120,6 +119,9 @@ function BattleMemberItem({
 							<InputNumber
 								placeholder="Броня"
 								disabled={member?.type === BattleMemberType.character}
+								onBlur={(event: ChangeEvent<HTMLInputElement>) =>
+									onFieldChange(member.key, "armor", event.target.value)
+								}
 							/>
 						</Form.Item>
 					</Col>
@@ -150,7 +152,13 @@ function BattleMemberItem({
 }
 
 function BattlePrepare({
-	campaign = { characters: [] },
+	campaign = {
+		characters: [],
+		id: "",
+		name: "",
+		dateCreated: 0,
+		dateUpdated: 0,
+	},
 	characters,
 	monsters,
 	battleTemplates,
@@ -175,8 +183,33 @@ function BattlePrepare({
 		setBattlePrepareData(newFormData);
 	}, [campaign]);
 
-	const onFinish = (data) => {
-		console.log(data);
+	const onFinish = () => {
+		const battleStartData: BattleI = battlePrepareData.reduce(
+			(result, battleMember) => {
+				if (battleMember.type === BattleMemberType.character) {
+					const newChar: CharacterForBattleI = {
+						id: battleMember.id,
+						initiative: Number(battleMember.initiative),
+					};
+					result.characters.push(newChar);
+				} else {
+					const newMonster: MonsterForBattleI = {
+						id: battleMember.id,
+						health: Number(battleMember?.health),
+						armor: Number(battleMember?.armor),
+						initiative: Number(battleMember.initiative),
+					};
+					result.monsters.push(newMonster);
+				}
+				return result;
+			},
+			{
+				campaignId: campaign.id,
+				characters: [],
+				monsters: [],
+			},
+		);
+		onBattleStart(battleStartData);
 	};
 
 	const onMemberDataChange = (
@@ -191,7 +224,6 @@ function BattlePrepare({
 				}
 				return member;
 			});
-			debugger;
 			if (field === "initiative") {
 				newData.sort(sortByField<FormMemberI>("initiative", false));
 			}
@@ -211,6 +243,33 @@ function BattlePrepare({
 				armor: monster?.armor ?? 0,
 				initiative: 0,
 			});
+		});
+	};
+
+	const onMonsterFromTempateAdd = (id: BattleTemplateI["id"]) => {
+		setBattlePrepareData((oldData) => {
+			const newMonsters: FormMemberI[] | undefined = battleTemplates
+				.find((template) => template.id === id)
+				?.monsters.map((monster) => {
+					return {
+						id: monster.id,
+						key: uniqueId(),
+						type: BattleMemberType.monster,
+						health: monster?.health,
+						armor: monster?.armor,
+						initiative: monster?.initiative ?? 0,
+						name:
+							monsters.find(
+								(fullDataMonster) => fullDataMonster.id === monster.id,
+							)?.name ?? "",
+					};
+				});
+			if (newMonsters) {
+				return oldData
+					.concat(newMonsters)
+					.sort(sortByField<FormMemberI>("initiative", false));
+			}
+			return oldData;
 		});
 	};
 
@@ -247,6 +306,14 @@ function BattlePrepare({
 			<Row justify="space-between">
 				<Col span={16}>
 					<Divider orientation="left">Участники битвы</Divider>
+					<Row justify="space-between">
+						<Col span={8}>Имя</Col>
+						<Col span={4}>Здоровье</Col>
+						<Col span={4}>Броня</Col>
+						<Col span={4}>Инициатива</Col>
+						<Col span={1} />
+					</Row>
+
 					<DndContext
 						sensors={sensors}
 						collisionDetection={closestCenter}
@@ -282,6 +349,7 @@ function BattlePrepare({
 								showSearch
 								placeholder="Выберите шаблон"
 								optionFilterProp="label"
+								onSelect={onMonsterFromTempateAdd}
 							/>
 						</Col>
 					</Row>
@@ -305,6 +373,12 @@ function BattlePrepare({
 					</Row>
 				</Col>
 			</Row>
+			<Flex gap={"small"} align={"center"}>
+				<Button type="primary" htmlType="submit" onClick={onFinish}>
+					Начать битву!
+				</Button>
+				{isPending && <Spin />}
+			</Flex>
 		</>
 	);
 }
