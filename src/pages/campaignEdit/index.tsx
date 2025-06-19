@@ -13,6 +13,8 @@ import { useCampaignUpdateMutation } from "../../entities/campaign/mutations";
 import BattlePrepare from "../../widgets/battlePrepare";
 import { monstersQueryOptions } from "../../entities/monster/queries";
 import { battleTemplatesQueryOptions } from "../../entities/battleTemplate/queries";
+import { BattleI } from "../../entities/battle/model";
+import { useBattleStartMutation } from "../../entities/battle/mutation";
 
 function CampaignEdit() {
 	const [isCampaignTouched, setIsCampaignTouched] = useState(false);
@@ -33,24 +35,29 @@ function CampaignEdit() {
 
 	const campaignUpdateMutation = useCampaignUpdateMutation(campaignId);
 
+	const battleStartMutation = useBattleStartMutation();
+
 	const isError =
 		campaignQuery.isError ||
 		charactersQuery.isError ||
 		monstersQuery.isError ||
 		battleTemplatesQuery.isError ||
-		campaignUpdateMutation.isError;
+		campaignUpdateMutation.isError ||
+		battleStartMutation.isError;
 	const errorMessage =
 		campaignQuery.error?.message ||
 		charactersQuery.error?.message ||
 		monstersQuery.error?.message ||
 		battleTemplatesQuery.error?.message ||
-		campaignUpdateMutation.error?.message;
+		campaignUpdateMutation.error?.message ||
+		battleStartMutation.error?.message;
 	const isPending =
 		campaignQuery.isPending ||
 		charactersQuery.isPending ||
 		monstersQuery.isPending ||
 		battleTemplatesQuery.isPending ||
-		campaignUpdateMutation.isPending;
+		campaignUpdateMutation.isPending ||
+		battleStartMutation.isPending;
 
 	const onCampaignSave = (data: CampaignEditT) =>
 		campaignUpdateMutation
@@ -60,7 +67,12 @@ function CampaignEdit() {
 	const onCampaignTouchedChange = (isTouched: boolean) =>
 		setIsCampaignTouched(isTouched);
 
-	const onBattleStart = () => {};
+	const onBattleStart = (data: BattleI) => {
+		battleStartMutation
+			.mutateAsync(data)
+			// TODO: не обсудили логику перехода к бою после старта
+			.then(() => console.log("Need redirect?"));
+	};
 
 	const tabItems: TabsProps["items"] = [
 		{

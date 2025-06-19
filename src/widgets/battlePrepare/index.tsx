@@ -69,7 +69,7 @@ function BattleMemberItem({
 	member: FormMemberI;
 	onFieldChange: (
 		key: FormMemberI["key"],
-		field: keyof FormMemberI,
+		field: keyof Pick<FormMemberI, "initiative" | "armor" | "health">,
 		data: string,
 	) => void;
 	onDelete: (key: FormMemberI["key"]) => void;
@@ -184,7 +184,7 @@ function BattlePrepare({
 	}, [campaign]);
 
 	const onFinish = () => {
-		const battleStartData: BattleI = battlePrepareData.reduce(
+		const battleStartData = battlePrepareData.reduce<BattleI>(
 			(result, battleMember) => {
 				if (battleMember.type === BattleMemberType.character) {
 					const newChar: CharacterForBattleI = {
@@ -214,13 +214,13 @@ function BattlePrepare({
 
 	const onMemberDataChange = (
 		key: FormMemberI["key"],
-		field: keyof FormMemberI,
+		field: keyof Pick<FormMemberI, "initiative" | "health" | "armor">,
 		value: string,
 	) => {
 		setBattlePrepareData((oldData) => {
 			const newData = oldData.map((member) => {
 				if (member.key === key) {
-					member[field] = value;
+					member[field] = Number(value);
 				}
 				return member;
 			});
