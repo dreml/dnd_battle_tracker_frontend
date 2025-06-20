@@ -13,6 +13,7 @@ export interface MonsterForBattleI {
 	id: string;
 	health: number;
 	armor: number;
+	initiative?: number;
 }
 
 export type MonsterNewT = Omit<MonsterI, "id">;

@@ -17,7 +17,8 @@ import {
 } from "../../entities/campaign/model";
 import { CharacterI } from "../../entities/character/model";
 import { useEffect } from "react";
-import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
+import AddEntityButton from "../../shared/ui/addEntityButton";
 
 type FormValuesT = CampaignEditT | CampaignNewT;
 
@@ -55,6 +56,24 @@ function CampaignForm({
 	const onValuesChange = () => {
 		onTouched?.(true);
 	};
+
+	const onCharacterSelect = (id: CharacterI["id"]) => {
+		const newCampaignCharacters: CharacterI[] = campaignForm
+			.getFieldValue("characters")
+			.map((character: CharacterI) => {
+				if (character.id === id) {
+					const newData = characters.find((character) => character.id === id);
+					return {
+						id,
+						armor: newData?.armor ?? 0,
+						health: newData?.health ?? 0,
+					};
+				}
+				return character;
+			});
+		campaignForm.setFieldValue("characters", newCampaignCharacters);
+	};
+
 	return (
 		<Form
 			form={campaignForm}
@@ -113,6 +132,7 @@ function CampaignForm({
 													showSearch
 													placeholder="Выберите персонажа"
 													optionFilterProp="label"
+													onSelect={onCharacterSelect}
 												/>
 											</Form.Item>
 										</Col>
@@ -143,14 +163,7 @@ function CampaignForm({
 								);
 							})}
 							<Form.Item>
-								<Button
-									type="dashed"
-									onClick={() => add()}
-									block
-									icon={<PlusOutlined />}
-								>
-									Добавить персонажа
-								</Button>
+								<AddEntityButton header="Добавить персонажа" onClick={add} />
 							</Form.Item>
 						</div>
 					)}

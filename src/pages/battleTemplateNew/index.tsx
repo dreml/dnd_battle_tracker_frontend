@@ -1,5 +1,5 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
-import BattleTemplateForm from "../../features/battleTemplateForm";
+import BattleTemplateForm from "../../widgets/battleTemplateForm";
 import { useQuery } from "@tanstack/react-query";
 import { campaignsQueryOptions } from "../../entities/campaign/queries";
 import { CampaignI } from "../../entities/campaign/model";

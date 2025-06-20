@@ -1,5 +1,5 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
-import MonsterForm from "../../features/monsterForm";
+import MonsterForm from "../../widgets/monsterForm";
 import { RouteProps, useParams } from "react-router";
 import { MonsterEditT } from "../../entities/monster/model";
 import { useQuery } from "@tanstack/react-query";

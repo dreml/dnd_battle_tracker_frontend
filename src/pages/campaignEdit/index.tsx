@@ -1,14 +1,20 @@
+import { useState } from "react";
+
 import PageWrapper from "../../shared/ui/pageWrapper";
 import { RouteProps, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { campaignQueryOptions } from "../../entities/campaign/queries";
 import { Tabs, TabsProps } from "antd";
 import { TeamOutlined, ThunderboltOutlined } from "@ant-design/icons";
-import CampaignForm from "../../features/campaignForm";
+import CampaignForm from "../../widgets/campaignForm";
 import { charactersQueryOptions } from "../../entities/character/queries";
 import { CampaignEditT } from "../../entities/campaign/model";
 import { useCampaignUpdateMutation } from "../../entities/campaign/mutations";
-import { useState } from "react";
+import BattlePrepare from "../../widgets/battlePrepare";
+import { monstersQueryOptions } from "../../entities/monster/queries";
+import { battleTemplatesQueryOptions } from "../../entities/battleTemplate/queries";
+import { BattleI } from "../../entities/battle/model";
+import { useBattleStartMutation } from "../../entities/battle/mutation";
 
 function CampaignEdit() {
 	const [isCampaignTouched, setIsCampaignTouched] = useState(false);
@@ -20,20 +26,37 @@ function CampaignEdit() {
 	const charactersQuery = useQuery(charactersQueryOptions());
 	const characters = charactersQuery.data ?? [];
 
+	const monstersQuery = useQuery(monstersQueryOptions());
+	const monsters = monstersQuery.data ?? [];
+
+	const battleTemplatesQuery = useQuery(battleTemplatesQueryOptions());
+	const battleTemplates = battleTemplatesQuery.data ?? [];
+
 	const campaignUpdateMutation = useCampaignUpdateMutation(campaignId);
+
+	const battleStartMutation = useBattleStartMutation();
 
 	const isError =
 		campaignQuery.isError ||
 		charactersQuery.isError ||
-		campaignUpdateMutation.isError;
+		monstersQuery.isError ||
+		battleTemplatesQuery.isError ||
+		campaignUpdateMutation.isError ||
+		battleStartMutation.isError;
 	const errorMessage =
 		campaignQuery.error?.message ||
 		charactersQuery.error?.message ||
-		campaignUpdateMutation.error?.message;
+		monstersQuery.error?.message ||
+		battleTemplatesQuery.error?.message ||
+		campaignUpdateMutation.error?.message ||
+		battleStartMutation.error?.message;
 	const isPending =
 		campaignQuery.isPending ||
 		charactersQuery.isPending ||
-		campaignUpdateMutation.isPending;
+		monstersQuery.isPending ||
+		battleTemplatesQuery.isPending ||
+		campaignUpdateMutation.isPending ||
+		battleStartMutation.isPending;
 
 	const onCampaignSave = (data: CampaignEditT) =>
 		campaignUpdateMutation
@@ -42,6 +65,13 @@ function CampaignEdit() {
 
 	const onCampaignTouchedChange = (isTouched: boolean) =>
 		setIsCampaignTouched(isTouched);
+
+	const onBattleStart = (data: BattleI) => {
+		battleStartMutation
+			.mutateAsync(data)
+			// TODO: не обсудили логику перехода к бою после старта
+			.then(() => console.log("Need redirect?"));
+	};
 
 	const tabItems: TabsProps["items"] = [
 		{
@@ -61,7 +91,20 @@ function CampaignEdit() {
 		{
 			key: "2",
 			label: "Бой",
-			children: <h2>hey33!!</h2>,
+			children: (
+				<div>
+					{campaign && (
+						<BattlePrepare
+							campaign={campaign}
+							characters={characters}
+							monsters={monsters}
+							battleTemplates={battleTemplates}
+							onBattleStart={onBattleStart}
+							isPending={isPending}
+						/>
+					)}
+				</div>
+			),
 			icon: <ThunderboltOutlined />,
 			disabled: isCampaignTouched,
 		},

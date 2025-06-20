@@ -22,7 +22,10 @@ const useCampaignUpdateMutation = (id: string) => {
 			updateCampaign(id, editedCampaign),
 		onSuccess: () => {
 			void queryClient.invalidateQueries({
-				queryKey: [CampaignQueryKey.campaigns, CampaignQueryKey.campaign],
+				queryKey: [CampaignQueryKey.campaigns],
+			});
+			void queryClient.invalidateQueries({
+				queryKey: [CampaignQueryKey.campaign],
 			});
 		},
 	});

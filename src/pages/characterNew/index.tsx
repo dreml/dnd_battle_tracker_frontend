@@ -1,5 +1,5 @@
 import PageWrapper from "../../shared/ui/pageWrapper";
-import CharacterForm from "../../features/characterForm";
+import CharacterForm from "../../widgets/characterForm";
 import { useQuery } from "@tanstack/react-query";
 import { CampaignI } from "../../entities/campaign/model";
 import { useNavigate } from "react-router";
