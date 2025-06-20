@@ -21,7 +21,6 @@ function CampaignEdit() {
 	const params: RouteProps = useParams();
 	const campaignId = params.id ?? "";
 	const campaignQuery = useQuery(campaignQueryOptions(campaignId));
-	// TODO: при сохранении не обновляется campaign в самом компоненте => в дочерних компонентах тоже не обновляется
 	const campaign = campaignQuery?.data;
 
 	const charactersQuery = useQuery(charactersQueryOptions());

@@ -17,7 +17,7 @@ import {
 } from "../../entities/campaign/model";
 import { CharacterI } from "../../entities/character/model";
 import { useEffect } from "react";
-import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
 import AddEntityButton from "../../shared/ui/addEntityButton";
 
 type FormValuesT = CampaignEditT | CampaignNewT;
@@ -57,7 +57,23 @@ function CampaignForm({
 		onTouched?.(true);
 	};
 
-	//TODO: to fix: при добавлении новых персонажей не устанавливаются их значения брони и хп
+	const onCharacterSelect = (id: CharacterI["id"]) => {
+		const newCampaignCharacters: CharacterI[] = campaignForm
+			.getFieldValue("characters")
+			.map((character: CharacterI) => {
+				if (character.id === id) {
+					const newData = characters.find((character) => character.id === id);
+					return {
+						id,
+						armor: newData?.armor ?? 0,
+						health: newData?.health ?? 0,
+					};
+				}
+				return character;
+			});
+		campaignForm.setFieldValue("characters", newCampaignCharacters);
+	};
+
 	return (
 		<Form
 			form={campaignForm}
@@ -113,10 +129,10 @@ function CampaignForm({
 																.find((char: string) => char === id),
 														}),
 													)}
-													// TODO: добавить действие при выборе
 													showSearch
 													placeholder="Выберите персонажа"
 													optionFilterProp="label"
+													onSelect={onCharacterSelect}
 												/>
 											</Form.Item>
 										</Col>
